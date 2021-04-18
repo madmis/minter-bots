@@ -32,7 +32,9 @@ class PollsArbitrationCommand extends Command
     {
         $this
             ->setDescription('Arbitrate in Minter pools.')
+            // 'https://mnt.funfasy.dev/v2/' - this node has a very low request limit. It's require min 3 sec delay;
             ->addOption('node-url', null, InputOption::VALUE_REQUIRED, 'Minter node url', 'https://api.minter.one/v2/')
+            ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 500000)
             ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300);
     }
 
@@ -94,6 +96,7 @@ class PollsArbitrationCommand extends Command
         ];
         $nodeUrl = $input->getOption('node-url');
         $txAmount = (int) $input->getOption('tx-amount');
+        $reqDelay = (int) $input->getOption('req-delay');
         $api = new MinterAPI($nodeUrl);
         $walletAddress = 'Mx3d6927d293a446451f050b330aee443029be1564';
         $walletPk = '76ec6fbe9a73ce052559af62518db8d91deda9bdda5fd213ab911be3e0a546dd';
@@ -114,7 +117,7 @@ class PollsArbitrationCommand extends Command
                             implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
                         ));
                         /** @noinspection PhpUnhandledExceptionInspection */
-                        $output->writeln("    Response: %s", json_encode($response, JSON_THROW_ON_ERROR));
+                        $output->writeln(sprintf("    Response: %s", json_encode($response, JSON_THROW_ON_ERROR)));
                     } catch (ClientException $e) {
                         $response = $e->getResponse();
                         $content = $response->getBody()->getContents();
@@ -130,24 +133,30 @@ class PollsArbitrationCommand extends Command
                                 $errorData['coin_symbol'],
                             ), $output::VERBOSITY_VERBOSE);
                         } else {
-                            $output->writeln("!!!ERROR: %s", $e->getResponse()->getBody()->getContents());
+                            $msg = json_encode([
+                                'content' => $e->getResponse()->getBody()->getContents(),
+                                'message' => $e->getMessage(),
+                                'class' => $e::class,
+                                'file' => $e->getFile(),
+                                'code' => $e->getLine(),
+                            ], JSON_THROW_ON_ERROR);
+                            $output->writeln("!!!ERROR: {$msg}");
                         }
                     }
                 } catch (GuzzleException $e) {
                     /** @noinspection PhpUnhandledExceptionInspection */
-                    $output->writeln("!!!CRITICAL: %s", json_encode(
-                        [
-                            'message' => $e->getMessage(),
-                            'class' => $e::class,
-                            'file' => $e->getFile(),
-                            'code' => $e->getLine(),
-                        ],
-                        JSON_THROW_ON_ERROR
-                    ));
+                    $msg = json_encode([
+                        'message' => $e->getMessage(),
+                        'class' => $e::class,
+                        'file' => $e->getFile(),
+                        'code' => $e->getLine(),
+                    ], JSON_THROW_ON_ERROR);
+                    $output->writeln(sprintf("!!!CRITICAL: %s", $msg));
+
                     sleep(60);
                 }
 
-                usleep(500000);
+                usleep($reqDelay);
             }
 
             sleep(2);
