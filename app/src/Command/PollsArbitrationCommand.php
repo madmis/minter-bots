@@ -52,6 +52,8 @@ class PollsArbitrationCommand extends Command
         $ftmusdId = 1048;
         $minterPayId = 133;
         $microbId = 1087;
+        $latteinId = 1036;
+        $freedomId = 21;
         $tickers = [
             $bipId => 'BIP',
             $bigmacId => 'BIGMAC',
@@ -62,6 +64,8 @@ class PollsArbitrationCommand extends Command
             $ftmusdId => 'FTMUSD',
             $minterPayId => 'MINTERPAY',
             $microbId => 'MICROB',
+            $latteinId => 'LATTEIN',
+            $freedomId => 'FREEDOM',
         ];
         $poolsToCheck = [
             // fee 2 BIP
@@ -79,6 +83,10 @@ class PollsArbitrationCommand extends Command
             [$bipId, $usdxId, $microbId, $bipId],
             [$bipId, $ftmusdId, $usdxId, $bipId],
             [$bipId, $usdxId, $ftmusdId, $bipId],
+            [$bipId, $usdxId, $latteinId, $bipId],
+            [$bipId, $latteinId, $usdxId, $bipId],
+            [$bipId, $freedomId, $ftmusdId, $bipId],
+            [$bipId, $ftmusdId, $freedomId, $bipId],
             // fee 2.25 BIP
             [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
             [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
