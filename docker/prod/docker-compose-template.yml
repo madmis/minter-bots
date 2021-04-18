@@ -1,0 +1,20 @@
+version: "3"
+services:
+    bip.php:
+        build:
+            context: ./php/
+        image: ccbip.php:prod
+        container_name: ccbip.php
+        env_file:
+            - .env
+        environment:
+            COLUMNS: "`tput cols`"
+            LINES: "`tput lines`"
+            UID_VAR: {{ UID_VALUE }}
+            GID_VAR: {{ GID_VALUE }}
+            XDEBUG_CONFIG: remote_host=10.254.254.254
+            PHP_IDE_CONFIG: serverName=ccbip.local
+        expose:
+            - "9000"
+        volumes:
+            - "../../app:/var/www/ccbip"
