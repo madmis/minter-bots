@@ -13,7 +13,7 @@ COPY php.ini /usr/local/etc/php/php.ini
 RUN sed -i "s/opcache.validate_timestamps=0 ; (comment this in dev env)/;opcache.validate_timestamps=0 ; (comment this in dev env)/g" /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
 RUN apt-get update \
-	&& apt-get install -y libgmp-dev \
+	&& apt-get install -y libgmp-dev procps \
 	&& ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
 	&& docker-php-ext-install -j$(nproc) gmp
 

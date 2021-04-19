@@ -112,20 +112,18 @@ class PollsArbitrationCommand extends Command
         while (true) {
             foreach ($poolsToCheck as $route) {
                 try {
-                    $fee = count($route) === 4 ? 2 : 2.5;
-                    $data = new MinterSellSwapPoolTx($route, $txAmount, $txAmount + $fee);
-                    $nonce = $api->getNonce($walletAddress);
-                    $tx = new MinterTx($nonce, $data);
-                    $signedTx = $tx->sign($walletPk);
-
                     try {
-                        $response = $api->send($signedTx);
-                        $output->writeln(sprintf(
-                            'R: %s',
-                            implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
-                        ));
-                        /** @noinspection PhpUnhandledExceptionInspection */
-                        $output->writeln(sprintf("    Response: %s", json_encode($response, JSON_THROW_ON_ERROR)));
+                        while (true) {
+                            $signedTx = $this->signTx($route, $txAmount, $api, $walletAddress, $walletPk);
+                            $response = $api->send($signedTx);
+                            $output->writeln(sprintf(
+                                'R: %s',
+                                implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
+                            ));
+                            /** @noinspection PhpUnhandledExceptionInspection */
+                            $output->writeln(sprintf("    Response: %s", json_encode($response, JSON_THROW_ON_ERROR)));
+                            usleep(200000);
+                        }
                     } catch (ClientException $e) {
                         $response = $e->getResponse();
                         $content = $response->getBody()->getContents();
@@ -170,6 +168,34 @@ class PollsArbitrationCommand extends Command
             sleep(2);
         }
 
-        return 0;
+        return self::SUCCESS;
+    }
+
+    /**
+     * signTx.
+     *
+     * @param array $route
+     * @param int $txAmount
+     * @param MinterAPI $api
+     * @param string $walletAddress
+     * @param string $walletPk
+     *
+     * @return string
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
+     */
+    private function signTx(
+        array $route,
+        int $txAmount,
+        MinterAPI $api,
+        string $walletAddress,
+        string $walletPk
+    ) : string {
+        $fee = count($route) === 4 ? 2 : 2.5;
+        $data = new MinterSellSwapPoolTx($route, $txAmount, $txAmount + $fee);
+        $nonce = $api->getNonce($walletAddress);
+        $tx = new MinterTx($nonce, $data);
+
+        return $tx->sign($walletPk);
     }
 }
