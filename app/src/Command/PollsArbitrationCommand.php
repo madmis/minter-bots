@@ -26,6 +26,22 @@ class PollsArbitrationCommand extends Command
     protected static $defaultName = 'app:pool:arbitrate';
 
     /**
+     * wallets.
+     *
+     * @var string[][]
+     */
+    private array $wallets = [
+        [
+            'wallet' => 'Mx3d6927d293a446451f050b330aee443029be1564',
+            'pk' => '76ec6fbe9a73ce052559af62518db8d91deda9bdda5fd213ab911be3e0a546dd',
+        ],
+        [
+            'wallet' => 'Mxa7de32768daa3e3d3273b9e251e424be33858cfa',
+            'pk' => '4d09292487ba49d2b53b3d2685d77569341d4e02e4a6fcc3e621556aa37a3677',
+        ],
+    ];
+
+    /**
      * @inheritdoc
      */
     protected function configure() : void
@@ -35,7 +51,8 @@ class PollsArbitrationCommand extends Command
             // 'https://mnt.funfasy.dev/v2/' - this node has a very low request limit. It's require min 3 sec delay;
             ->addOption('node-url', null, InputOption::VALUE_REQUIRED, 'Minter node url', 'https://api.minter.one/v2/')
             ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 500000)
-            ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300);
+            ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300)
+            ->addOption('wallet-idx', null, InputOption::VALUE_REQUIRED, 'Wallet index: 0 (Mx3d...1564) or 1 (Mxa7...8cfa)', 0);
     }
 
     /**
@@ -106,24 +123,22 @@ class PollsArbitrationCommand extends Command
         $txAmount = (int) $input->getOption('tx-amount');
         $reqDelay = (int) $input->getOption('req-delay');
         $api = new MinterAPI($nodeUrl);
-        $walletAddress = 'Mx3d6927d293a446451f050b330aee443029be1564';
-        $walletPk = '76ec6fbe9a73ce052559af62518db8d91deda9bdda5fd213ab911be3e0a546dd';
+        $walletIdx = (int) $input->getOption('wallet-idx');
+        $walletAddress = $this->wallets[$walletIdx]['wallet'];
+        $walletPk = $this->wallets[$walletIdx]['pk'];
 
         while (true) {
             foreach ($poolsToCheck as $route) {
                 try {
                     try {
-                        while (true) {
-                            $signedTx = $this->signTx($route, $txAmount, $api, $walletAddress, $walletPk);
-                            $response = $api->send($signedTx);
-                            $output->writeln(sprintf(
-                                'R: %s',
-                                implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
-                            ));
-                            /** @noinspection PhpUnhandledExceptionInspection */
-                            $output->writeln(sprintf("    Response: %s", json_encode($response, JSON_THROW_ON_ERROR)));
-                            usleep(200000);
-                        }
+                        $signedTx = $this->signTx($route, $txAmount, $api, $walletAddress, $walletPk);
+                        $response = $api->send($signedTx);
+                        $output->writeln(sprintf(
+                            'R: %s',
+                            implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
+                        ));
+                        /** @noinspection PhpUnhandledExceptionInspection */
+                        $output->writeln(sprintf("    Response: %s", json_encode($response, JSON_THROW_ON_ERROR)));
                     } catch (ClientException $e) {
                         $response = $e->getResponse();
                         $content = $response->getBody()->getContents();

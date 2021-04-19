@@ -40,6 +40,10 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $wallet = MinterWallet::createFromMnemonic('ring local dilemma bless injury surprise twist proof jeans language donate tray');
+        dump($wallet->getPrivateKey());
+
+        return 0;
         //Боевая сеть: https://api.minter.stakeholder.space/
         //Тестовая сеть: https://api.testnet.minter.stakeholder.space/
 
@@ -47,105 +51,8 @@ class TestCommand extends Command
 //        $nodeUrl = 'https://mnt.funfasy.dev/v2/';
         $nodeUrl = 'https://api.minter.one/v2/';
         $api = new MinterAPI($nodeUrl);
-//        dump($api->getBalance('Mxf5f3bdad964d9f36bb6a3a526c69bc93da28269a'));
-//        dump($api->estimateCoinSell('BIP', 10, 'BIP'));
-        $bipId = 0;
-        $bigmacId = 907;
-        $usdxId = 1678;
-        $quotaId = 1086;
-        $couponId = 1043;
-        $rubxId = 1784;
-        $ftmusdId = 1048;
-        $minterPayId = 133;
-        $microbId = 1087;
-        $tickers = [
-            $bipId => 'BIP',
-            $bigmacId => 'BIGMAC',
-            $usdxId => 'USDX',
-            $quotaId => 'QUOTA',
-            $couponId => 'COUPON',
-            $rubxId => 'RUBX',
-            $ftmusdId => 'FTMUSD',
-            $minterPayId => 'MINTERPAY',
-            $microbId => 'MICROB',
-        ];
-        $poolsToCheck = [
-            // fee 2 BIP
-            [$bipId, $bigmacId, $couponId, $bipId],
-            [$bipId, $couponId, $bigmacId, $bipId],
-            [$bipId, $bigmacId, $usdxId, $bipId],
-            [$bipId, $usdxId, $bigmacId, $bipId],
-            [$bipId, $quotaId, $usdxId, $bipId],
-            [$bipId, $usdxId, $quotaId, $bipId],
-            [$bipId, $rubxId, $usdxId, $bipId],
-            [$bipId, $usdxId, $rubxId, $bipId],
-            [$bipId, $usdxId, $couponId, $bipId],
-            [$bipId, $couponId, $usdxId, $bipId],
-            [$bipId, $microbId, $usdxId, $bipId],
-            [$bipId, $usdxId, $microbId, $bipId],
-            [$bipId, $ftmusdId, $usdxId, $bipId],
-            [$bipId, $usdxId, $ftmusdId, $bipId],
-            // fee 2.25 BIP
-            [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
-            [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
-            [$bipId, $couponId, $usdxId, $quotaId, $bipId],
-            [$bipId, $quotaId, $usdxId, $couponId, $bipId],
-            [$bipId, $usdxId, $bigmacId, $couponId, $bipId],
-            [$bipId, $usdxId, $couponId, $bigmacId, $bipId],
-            [$bipId, $bigmacId, $usdxId, $couponId, $bipId],
-            [$bipId, $bigmacId, $couponId, $usdxId, $bipId],
-            [$bipId, $couponId, $bigmacId, $usdxId, $bipId],
-            [$bipId, $couponId, $usdxId, $bigmacId, $bipId],
-            [$bipId, $couponId, $usdxId, $rubxId, $bipId],
-            [$bipId, $rubxId, $usdxId, $couponId, $bipId],
-        ];
 
-        foreach ($poolsToCheck as $route) {
-            usleep(500000);
-            $output->writeln(sprintf(
-                'R: %s',
-                implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
-            ));
-            $fee = count($route) === 4 ? 2 : 2.5;
-            $data = new MinterSellSwapPoolTx($route, 100, 100+$fee);
-            $nonce = $api->getNonce('Mx3d6927d293a446451f050b330aee443029be1564');
-            $tx = new MinterTx($nonce, $data);
-            $txx = $tx->sign('76ec6fbe9a73ce052559af62518db8d91deda9bdda5fd213ab911be3e0a546dd');
-            try {
-                dump($api->send($txx));
-                $output->writeln("+++DONE+++");
-            } catch (ClientException $e) {
-                $response = $e->getResponse();
-                $content = $response->getBody()->getContents();
-                $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
-                if (!empty($data['error']['code']) && (int) $data['error']['code'] === 302) {
-                    $errorData = $data['error']['data'];
-                    $output->writeln(sprintf(
-                        "    Want: %s. Got: %s. Coin: %s",
-                        $errorData['maximum_value_to_sell'],
-                        $errorData['needed_spend_value'],
-                        $errorData['coin_symbol'],
-                    ));
-                } else {
-                    dump($e->getResponse()->getBody()->getContents());
-                }
-            }
-        }
-//
-//        $data = new MinterSellSwapPoolTx([$bip, $quotaId, $usdxId, $bip], 10, 12.5);
-////        $data = new MinterSellCoinTx(0, '10', 0, '12.5');
-//        $nonce = $api->getNonce('Mx3d6927d293a446451f050b330aee443029be1564');
-//        $tx = new MinterTx($nonce, $data);
-//        $txx = $tx->sign('76ec6fbe9a73ce052559af62518db8d91deda9bdda5fd213ab911be3e0a546dd');
-//        try {
-//            dump($api->send($txx));
-//        } catch (ClientException $e) {
-//            dump($e->getResponse()->getBody()->getContents());
-//        }
-
-        sleep(5);
-        return 0;
 
         //        array(5) {
         //        'seed' =>
