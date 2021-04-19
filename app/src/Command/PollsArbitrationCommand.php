@@ -50,7 +50,7 @@ class PollsArbitrationCommand extends Command
             ->setDescription('Arbitrate in Minter pools.')
             // 'https://mnt.funfasy.dev/v2/' - this node has a very low request limit. It's require min 3 sec delay;
             ->addOption('node-url', null, InputOption::VALUE_REQUIRED, 'Minter node url', 'https://api.minter.one/v2/')
-            ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 500000)
+            ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 1000000)
             ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300)
             ->addOption('wallet-idx', null, InputOption::VALUE_REQUIRED, 'Wallet index: 0 (Mx3d...1564) or 1 (Mxa7...8cfa)', 0);
     }
