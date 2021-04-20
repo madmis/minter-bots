@@ -39,6 +39,14 @@ class PollsArbitrationCommand extends Command
             'wallet' => 'Mxa7de32768daa3e3d3273b9e251e424be33858cfa',
             'pk' => '4d09292487ba49d2b53b3d2685d77569341d4e02e4a6fcc3e621556aa37a3677',
         ],
+        [
+            'wallet' => 'Mx8ab4f4f3909182e1dd5bebf239a043960e4e4557',
+            'pk' => '30fbeff069a78b69afe75e2b43459af4674cf915b3799a57bb739f236d151f88',
+        ],
+        [
+            'wallet' => 'Mx7586ad025e0f6665c28528f6844ddd00185d097c',
+            'pk' => 'da708822753c1c3f054c1e63d0667fcb7b9e2beb59930880905789c6d82e6025',
+        ],
     ];
 
     /**
@@ -52,7 +60,13 @@ class PollsArbitrationCommand extends Command
             ->addOption('node-url', null, InputOption::VALUE_REQUIRED, 'Minter node url', 'https://api.minter.one/v2/')
             ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 1000000)
             ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300)
-            ->addOption('wallet-idx', null, InputOption::VALUE_REQUIRED, 'Wallet index: 0 (Mx3d...1564) or 1 (Mxa7...8cfa)', 0);
+            ->addOption(
+                'wallet-idx',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Wallet index: 0(Mx3d...1564), 1(Mxa7...8cfa), 2(Mx8a...4557), 3(Mx75...097c)',
+                0
+            );
     }
 
     /**
@@ -104,9 +118,13 @@ class PollsArbitrationCommand extends Command
             [$bipId, $latteinId, $usdxId, $bipId],
             [$bipId, $freedomId, $ftmusdId, $bipId],
             [$bipId, $ftmusdId, $freedomId, $bipId],
+            [$bipId, $bigmacId, $quotaId, $bipId],
+            [$bipId, $quotaId, $bigmacId,  $bipId],
             // fee 2.25 BIP
             [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
             [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
+            [$bipId, $quotaId, $bigmacId, $usdxId, $bipId],
+            [$bipId, $bigmacId, $quotaId, $usdxId, $bipId],
             [$bipId, $couponId, $usdxId, $quotaId, $bipId],
             [$bipId, $quotaId, $usdxId, $couponId, $bipId],
             [$bipId, $usdxId, $bigmacId, $couponId, $bipId],

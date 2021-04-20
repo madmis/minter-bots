@@ -40,7 +40,7 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $wallet = MinterWallet::createFromMnemonic('ring local dilemma bless injury surprise twist proof jeans language donate tray');
+        $wallet = MinterWallet::createFromMnemonic('');
         dump($wallet->getPrivateKey());
 
         return 0;

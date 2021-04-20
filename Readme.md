@@ -7,7 +7,7 @@ $ make up
 $ make exec
 $ ./bin/console app:pool:arbitrate --node-url='https://mnt.funfasy.dev/v2/' --tx-amount=110 --req-delay=3000000 -vvv
 OR
-$ ./bin/console app:pool:arbitrate --node-url='https://api.minter.one/v2/' --tx-amount=100 -vvv
+$ ./bin/console app:pool:arbitrate --node-url='https://api.minter.one/v2/' --tx-amount=100 --wallet-idx=0
 ```
 
 ### Run in background
