@@ -150,11 +150,12 @@ class PollsArbitrationCommand extends Command
             [$bipId, $rubxId, $usdxId, $couponId, $bipId],
 
         ];
-        $nodeUrl = $input->getOption('node-url');
+        $readNodeUrl = $input->getOption('read-node');
+        $writeNodeUrl = $input->getOption('write-node');
         $txAmount = (int) $input->getOption('tx-amount');
         $reqDelay = (int) $input->getOption('req-delay');
-        $api = new MinterAPI($nodeUrl);
-        $api2 = new MinterAPI('https://gate-api.minter.network/api/v2/');
+        $readApi = new MinterAPI($readNodeUrl);
+        $writeApi = new MinterAPI($writeNodeUrl);
         $walletIdx = (int) $input->getOption('wallet-idx');
         $walletAddress = $this->wallets[$walletIdx]['wallet'];
         $walletPk = $this->wallets[$walletIdx]['pk'];
@@ -163,8 +164,8 @@ class PollsArbitrationCommand extends Command
             foreach ($poolsToCheck as $route) {
                 try {
                     try {
-                        $signedTx = $this->signTx($route, $txAmount, $api, $walletAddress, $walletPk);
-                        $response = $api2->send($signedTx);
+                        $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk);
+                        $response = $writeApi->send($signedTx);
                         $output->writeln(sprintf(
                             'R: %s',
                             implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
