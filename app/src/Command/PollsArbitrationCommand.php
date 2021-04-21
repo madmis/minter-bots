@@ -57,7 +57,20 @@ class PollsArbitrationCommand extends Command
         $this
             ->setDescription('Arbitrate in Minter pools.')
             // 'https://mnt.funfasy.dev/v2/' - this node has a very low request limit. It's require min 3 sec delay;
-            ->addOption('node-url', null, InputOption::VALUE_REQUIRED, 'Minter node url', 'https://api.minter.one/v2/')
+            ->addOption(
+                'read-node',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Minter read node url',
+                'https://api.minter.one/v2/'
+            )
+            ->addOption(
+                'write-node',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Minter write node url',
+                'https://gate-api.minter.network/api/v2/'
+            )
             ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 500000)
             ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300)
             ->addOption(
@@ -141,6 +154,7 @@ class PollsArbitrationCommand extends Command
         $txAmount = (int) $input->getOption('tx-amount');
         $reqDelay = (int) $input->getOption('req-delay');
         $api = new MinterAPI($nodeUrl);
+        $api2 = new MinterAPI('https://gate-api.minter.network/api/v2/');
         $walletIdx = (int) $input->getOption('wallet-idx');
         $walletAddress = $this->wallets[$walletIdx]['wallet'];
         $walletPk = $this->wallets[$walletIdx]['pk'];
@@ -150,7 +164,7 @@ class PollsArbitrationCommand extends Command
                 try {
                     try {
                         $signedTx = $this->signTx($route, $txAmount, $api, $walletAddress, $walletPk);
-                        $response = $api->send($signedTx);
+                        $response = $api2->send($signedTx);
                         $output->writeln(sprintf(
                             'R: %s',
                             implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))

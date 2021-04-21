@@ -5,10 +5,12 @@ $ apt-get update && apt-get install -y procps
 $ cd docker/prod
 $ make up
 $ make exec
-$ ./bin/console app:pool:arbitrate --node-url='https://mnt.funfasy.dev/v2/' --tx-amount=110 --req-delay=3000000 -vvv
+$ ./bin/console app:pool:arbitrate --read-node='https://mnt.funfasy.dev/v2/' --write-node='https://mnt.funfasy.dev/v2/' --tx-amount=110 --req-delay=3000000 -vvv
 OR
-$ ./bin/console app:pool:arbitrate --node-url='https://api.minter.one/v2/' --tx-amount=100 --wallet-idx=0
+$ ./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/' -write-node='https://api.minter.one/v2/' --tx-amount=100 --wallet-idx=0
 ```
+
+https://gate-api.minter.network/api/v2
 
 ### Run in background
 
@@ -18,3 +20,8 @@ $ ./bin/console app:pool:arbitrate --node-url='https://api.minter.one/v2/' --tx-
 
 ```
 
+### Nodes
+
+* https://mnt.funfasy.dev/v2/ - this node has a very low request limit. It's requirement min 3 sec delay;
+* https://api.minter.one/v2/
+* https://gate-api.minter.network/api/v2/ - Write node only.
