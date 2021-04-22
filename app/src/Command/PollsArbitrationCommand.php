@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Minter\MinterAPI;
 use Minter\SDK\MinterCoins\MinterSellSwapPoolTx;
 use Minter\SDK\MinterTx;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -48,6 +49,27 @@ class PollsArbitrationCommand extends Command
             'pk' => 'da708822753c1c3f054c1e63d0667fcb7b9e2beb59930880905789c6d82e6025',
         ],
     ];
+
+    /**
+     * logger.
+     *
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * PollsArbitrationCommand.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        parent::__construct();
+
+        $this->logger = $logger;
+    }
 
     /**
      * @inheritdoc
@@ -132,7 +154,7 @@ class PollsArbitrationCommand extends Command
             [$bipId, $freedomId, $ftmusdId, $bipId],
             [$bipId, $ftmusdId, $freedomId, $bipId],
             [$bipId, $bigmacId, $quotaId, $bipId],
-            [$bipId, $quotaId, $bigmacId,  $bipId],
+            [$bipId, $quotaId, $bigmacId, $bipId],
             // fee 2.25 BIP
             [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
             [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
@@ -166,12 +188,10 @@ class PollsArbitrationCommand extends Command
                     try {
                         $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk);
                         $response = $writeApi->send($signedTx);
-                        $output->writeln(sprintf(
+                        $this->logger->info(sprintf(
                             'R: %s',
                             implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
-                        ));
-                        /** @noinspection PhpUnhandledExceptionInspection */
-                        $output->writeln(sprintf("    Response: %s", json_encode($response, JSON_THROW_ON_ERROR)));
+                        ), ['response' => $response]);
                     } catch (ClientException $e) {
                         $response = $e->getResponse();
                         $content = $response->getBody()->getContents();
@@ -180,32 +200,32 @@ class PollsArbitrationCommand extends Command
 
                         if (!empty($data['error']['code']) && (int) $data['error']['code'] === 302) {
                             $errorData = $data['error']['data'];
-                            $output->writeln(sprintf(
-                                "    Want: %s. Got: %s. Coin: %s",
-                                $errorData['maximum_value_to_sell'],
-                                $errorData['needed_spend_value'],
-                                $errorData['coin_symbol'],
-                            ), $output::VERBOSITY_VERBOSE);
+                            if ($output->isVeryVerbose()) {
+                                $this->logger->debug(sprintf(
+                                    "Want: %s. Got: %s. Coin: %s",
+                                    $errorData['maximum_value_to_sell'],
+                                    $errorData['needed_spend_value'],
+                                    $errorData['coin_symbol'],
+                                ));
+                            }
                         } else {
-                            $msg = json_encode([
+                            $this->logger->error($e->getMessage(), [
                                 'content' => $e->getResponse()->getBody()->getContents(),
                                 'message' => $e->getMessage(),
                                 'class' => $e::class,
                                 'file' => $e->getFile(),
                                 'code' => $e->getLine(),
-                            ], JSON_THROW_ON_ERROR);
-                            $output->writeln("!!!ERROR: {$msg}");
+                            ]);
+
                         }
                     }
                 } catch (GuzzleException $e) {
-                    /** @noinspection PhpUnhandledExceptionInspection */
-                    $msg = json_encode([
+                    $this->logger->critical($e->getMessage(), [
                         'message' => $e->getMessage(),
                         'class' => $e::class,
                         'file' => $e->getFile(),
                         'code' => $e->getLine(),
-                    ], JSON_THROW_ON_ERROR);
-                    $output->writeln(sprintf("!!!CRITICAL: %s", $msg));
+                    ]);
 
                     sleep(60);
                 }
