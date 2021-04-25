@@ -27,27 +27,22 @@ class PoolsCommand extends Command
      */
     protected function configure() : void
     {
-        $this
-            ->setDescription('Get pools info.');
+        $this->setDescription('Get pools info.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $client = new Client();
-        $page = $lastPage = 1;
         $items = [];
 
         do {
-            $output->writeln("Request page: {$page}");
-            $response = $client->get('https://explorer-api.minter.network/api/v2/pools', [
-                'query' => ['page' => $page],
-            ]);
+            $poolsUrl = $data['links']['next'] ?? 'https://explorer-api.minter.network/api/v2/pools';
+            $output->writeln("Request page: {$poolsUrl}");
+            $response = $client->get($poolsUrl);
             $content = $response->getBody()->getContents();
             $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-            $items += $data['data'];
-            $page = $data['meta']['current_page'] + 1;
-            $lastPage = $data['meta']['last_page'];
-        } while ($page <= $lastPage);
+            $items = array_merge($items, $data['data']);
+        } while (!empty($data['links']['next']));
 
         if ($items) {
             usort($items, static function (array $b, array $a) {

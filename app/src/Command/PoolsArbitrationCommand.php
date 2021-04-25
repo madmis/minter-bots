@@ -4,6 +4,7 @@ namespace App\Command;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException;
 use Minter\MinterAPI;
 use Minter\SDK\MinterCoins\MinterSellSwapPoolTx;
 use Minter\SDK\MinterTx;
@@ -14,10 +15,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class PollsArbitrationCommand
+ * Class PoolsArbitrationCommand
  * @package App\Command
  */
-class PollsArbitrationCommand extends Command
+class PoolsArbitrationCommand extends Command
 {
     /**
      * defaultName.
@@ -32,19 +33,19 @@ class PollsArbitrationCommand extends Command
      * @var string[][]
      */
     private array $wallets = [
-        [
+        0 => [
             'wallet' => 'Mx3d6927d293a446451f050b330aee443029be1564',
             'pk' => '76ec6fbe9a73ce052559af62518db8d91deda9bdda5fd213ab911be3e0a546dd',
         ],
-        [
+        1 => [
             'wallet' => 'Mxa7de32768daa3e3d3273b9e251e424be33858cfa',
             'pk' => '4d09292487ba49d2b53b3d2685d77569341d4e02e4a6fcc3e621556aa37a3677',
         ],
-        [
+        2 => [
             'wallet' => 'Mx8ab4f4f3909182e1dd5bebf239a043960e4e4557',
             'pk' => '30fbeff069a78b69afe75e2b43459af4674cf915b3799a57bb739f236d151f88',
         ],
-        [
+        3 => [
             'wallet' => 'Mx7586ad025e0f6665c28528f6844ddd00185d097c',
             'pk' => 'da708822753c1c3f054c1e63d0667fcb7b9e2beb59930880905789c6d82e6025',
         ],
@@ -93,7 +94,7 @@ class PollsArbitrationCommand extends Command
                 'Minter write node url',
                 'https://gate-api.minter.network/api/v2/'
             )
-            ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 500000)
+            ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 200000)
             ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300)
             ->addOption(
                 'wallet-idx',
@@ -188,10 +189,18 @@ class PollsArbitrationCommand extends Command
                     try {
                         $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk);
                         $response = $writeApi->send($signedTx);
-                        $this->logger->info(sprintf(
-                            'R: %s',
-                            implode('=>', array_map(static fn(int $id) => $tickers[$id], $route))
-                        ), ['response' => $response]);
+                        $this->logger->info('R: {route}', [
+                            'response' => $response,
+                            'route' => implode('=>', array_map(static fn(int $id) => $tickers[$id], $route)),
+                        ]);
+                        // after successful tx change wallet to make new tx from new wallet
+                        $walletIdx = $this->getNextWalletIdx($walletIdx);
+                        $walletAddress = $this->wallets[$walletIdx]['wallet'];
+                        $walletPk = $this->wallets[$walletIdx]['pk'];
+                        $this->logger->info("\tChange wallet to: {walletIdx}: {walletAddress}", [
+                            'walletIdx' => $walletIdx,
+                            'walletAddress' => $walletAddress,
+                        ]);
                     } catch (ClientException $e) {
                         $response = $e->getResponse();
                         $content = $response->getBody()->getContents();
@@ -200,14 +209,11 @@ class PollsArbitrationCommand extends Command
 
                         if (!empty($data['error']['code']) && (int) $data['error']['code'] === 302) {
                             $errorData = $data['error']['data'];
-                            if ($output->isVeryVerbose()) {
-                                $this->logger->debug(sprintf(
-                                    "Want: %s. Got: %s. Coin: %s",
-                                    $errorData['maximum_value_to_sell'],
-                                    $errorData['needed_spend_value'],
-                                    $errorData['coin_symbol'],
-                                ));
-                            }
+                            $this->logger->debug('Want: {maxValToSell}. Got: {neededSpendVal}. Coin: {coinSymbol}', [
+                                'maxValToSell' => $errorData['maximum_value_to_sell'],
+                                'neededSpendVal' => $errorData['needed_spend_value'],
+                                'coinSymbol' => $errorData['coin_symbol'],
+                            ]);
                         } else {
                             $this->logger->error($e->getMessage(), [
                                 'content' => $e->getResponse()->getBody()->getContents(),
@@ -216,9 +222,14 @@ class PollsArbitrationCommand extends Command
                                 'file' => $e->getFile(),
                                 'code' => $e->getLine(),
                             ]);
-
                         }
                     }
+                } catch (ServerException $e) {
+                    $this->logger->critical('{code}: {phrase}', [
+                        'code' => $e->getResponse()->getStatusCode(),
+                        'phrase' => $e->getResponse()->getReasonPhrase(),
+                    ]);
+                    sleep(2);
                 } catch (GuzzleException $e) {
                     $this->logger->critical($e->getMessage(), [
                         'message' => $e->getMessage(),
@@ -227,7 +238,7 @@ class PollsArbitrationCommand extends Command
                         'code' => $e->getLine(),
                     ]);
 
-                    sleep(60);
+                    sleep(10);
                 }
 
                 usleep($reqDelay);
@@ -237,6 +248,18 @@ class PollsArbitrationCommand extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    /**
+     * getNextWallet.
+     *
+     * @param int $currWalletIdx
+     *
+     * @return int
+     */
+    private function getNextWalletIdx(int $currWalletIdx) : int
+    {
+        return isset($this->wallets[$currWalletIdx + 1]) ? $currWalletIdx + 1 : 0;
     }
 
     /**
