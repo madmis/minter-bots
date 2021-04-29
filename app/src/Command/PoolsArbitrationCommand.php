@@ -94,7 +94,7 @@ class PoolsArbitrationCommand extends Command
                 'Minter write node url',
                 'https://gate-api.minter.network/api/v2/'
             )
-            ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 200000)
+            ->addOption('req-delay', null, InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 500000)
             ->addOption('tx-amount', null, InputOption::VALUE_REQUIRED, 'Transaction amount', 300)
             ->addOption(
                 'wallet-idx',
@@ -116,11 +116,13 @@ class PoolsArbitrationCommand extends Command
         $quotaId = 1086;
         $couponId = 1043;
         $rubxId = 1784;
+        $rubtId = 1054;
         $ftmusdId = 1048;
         $minterPayId = 133;
         $microbId = 1087;
         $latteinId = 1036;
         $freedomId = 21;
+        $hubId = 1902;
         $tickers = [
             $bipId => 'BIP',
             $bigmacId => 'BIGMAC',
@@ -133,11 +135,17 @@ class PoolsArbitrationCommand extends Command
             $microbId => 'MICROB',
             $latteinId => 'LATTEIN',
             $freedomId => 'FREEDOM',
+            $hubId => 'HUB',
+            $rubtId => 'RUBT',
         ];
         $poolsToCheck = [
             // fee 2 BIP
             [$bipId, $bigmacId, $couponId, $bipId],
             [$bipId, $couponId, $bigmacId, $bipId],
+            [$bipId, $bigmacId, $quotaId, $bipId],
+            [$bipId, $quotaId, $bigmacId, $bipId],
+            [$bipId, $hubId, $rubxId, $bipId],
+            [$bipId, $rubxId, $hubId, $bipId],
             [$bipId, $bigmacId, $usdxId, $bipId],
             [$bipId, $usdxId, $bigmacId, $bipId],
             [$bipId, $quotaId, $usdxId, $bipId],
@@ -156,6 +164,10 @@ class PoolsArbitrationCommand extends Command
             [$bipId, $ftmusdId, $freedomId, $bipId],
             [$bipId, $bigmacId, $quotaId, $bipId],
             [$bipId, $quotaId, $bigmacId, $bipId],
+            [$bipId, $bigmacId, $couponId, $bipId],
+            [$bipId, $couponId, $bigmacId, $bipId],
+            [$bipId, $rubxId, $rubtId, $bipId],
+            [$bipId, $rubtId, $rubxId, $bipId],
             // fee 2.25 BIP
             [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
             [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
@@ -185,22 +197,25 @@ class PoolsArbitrationCommand extends Command
 
         while (true) {
             foreach ($poolsToCheck as $route) {
+                $routeStr = implode('=>', array_map(static fn(int $id) => $tickers[$id], $route));
                 try {
                     try {
                         $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk);
-                        $response = $writeApi->send($signedTx);
-                        $this->logger->info('R: {route}', [
-                            'response' => $response,
-                            'route' => implode('=>', array_map(static fn(int $id) => $tickers[$id], $route)),
-                        ]);
+                        $response = (array) $writeApi->send($signedTx);
+                        $this->logger->info(sprintf('Route: %s', $routeStr));
+                        $this->logger->debug("\t", ['response' => (array) $response]);
+
                         // after successful tx change wallet to make new tx from new wallet
                         $walletIdx = $this->getNextWalletIdx($walletIdx);
+                        $oldWallet = $walletAddress;
                         $walletAddress = $this->wallets[$walletIdx]['wallet'];
                         $walletPk = $this->wallets[$walletIdx]['pk'];
-                        $this->logger->info("\tChange wallet to: {walletIdx}: {walletAddress}", [
-                            'walletIdx' => $walletIdx,
-                            'walletAddress' => $walletAddress,
-                        ]);
+                        $this->logger->info(sprintf(
+                            "\tChange wallet from %s => to: %s: %s",
+                            $oldWallet,
+                            $walletIdx,
+                            $walletAddress,
+                        ));
                     } catch (ClientException $e) {
                         $response = $e->getResponse();
                         $content = $response->getBody()->getContents();
@@ -209,15 +224,15 @@ class PoolsArbitrationCommand extends Command
 
                         if (!empty($data['error']['code']) && (int) $data['error']['code'] === 302) {
                             $errorData = $data['error']['data'];
-                            $this->logger->debug('Want: {maxValToSell}. Got: {neededSpendVal}. Coin: {coinSymbol}', [
-                                'maxValToSell' => $errorData['maximum_value_to_sell'],
-                                'neededSpendVal' => $errorData['needed_spend_value'],
-                                'coinSymbol' => $errorData['coin_symbol'],
-                            ]);
+                            $this->logger->debug(sprintf(
+                                'Want: %s. Got: %s. Coin: %s',
+                                $errorData['maximum_value_to_sell'],
+                                $errorData['needed_spend_value'],
+                                $errorData['coin_symbol'],
+                            ));
                         } else {
                             $this->logger->error($e->getMessage(), [
                                 'content' => $e->getResponse()->getBody()->getContents(),
-                                'message' => $e->getMessage(),
                                 'class' => $e::class,
                                 'file' => $e->getFile(),
                                 'code' => $e->getLine(),
@@ -225,14 +240,14 @@ class PoolsArbitrationCommand extends Command
                         }
                     }
                 } catch (ServerException $e) {
-                    $this->logger->critical('{code}: {phrase}', [
-                        'code' => $e->getResponse()->getStatusCode(),
-                        'phrase' => $e->getResponse()->getReasonPhrase(),
-                    ]);
+                    $this->logger->critical(sprintf(
+                        '%s: %s',
+                        $e->getResponse()->getStatusCode(),
+                        $e->getResponse()->getReasonPhrase(),
+                    ));
                     sleep(2);
                 } catch (GuzzleException $e) {
                     $this->logger->critical($e->getMessage(), [
-                        'message' => $e->getMessage(),
                         'class' => $e::class,
                         'file' => $e->getFile(),
                         'code' => $e->getLine(),

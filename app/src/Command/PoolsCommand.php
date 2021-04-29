@@ -59,7 +59,7 @@ class PoolsCommand extends Command
         foreach ($items as $item) {
             $volume = (int) $item['trade_volume_bip_30d'];
 
-            if ($volume > 1000) {
+//            if ($volume > 1000) {
                 $output->writeln(sprintf(
                     '%s: %s/%s - %s',
                     $item['token']['symbol'],
@@ -67,7 +67,7 @@ class PoolsCommand extends Command
                     $item['coin1']['symbol'],
                     $volume,
                 ));
-            }
+//            }
         }
 
         return 0;
