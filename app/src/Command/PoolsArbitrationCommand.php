@@ -123,6 +123,7 @@ class PoolsArbitrationCommand extends Command
         $latteinId = 1036;
         $freedomId = 21;
         $hubId = 1902;
+        $liquidhubId = 1893;
         $tickers = [
             $bipId => 'BIP',
             $bigmacId => 'BIGMAC',
@@ -137,6 +138,7 @@ class PoolsArbitrationCommand extends Command
             $freedomId => 'FREEDOM',
             $hubId => 'HUB',
             $rubtId => 'RUBT',
+            $liquidhubId => 'LIQUIDHUB',
         ];
         $poolsToCheck = [
             // fee 2 BIP
@@ -146,6 +148,8 @@ class PoolsArbitrationCommand extends Command
             [$bipId, $quotaId, $bigmacId, $bipId],
             [$bipId, $hubId, $rubxId, $bipId],
             [$bipId, $rubxId, $hubId, $bipId],
+            [$bipId, $hubId, $liquidhubId, $bipId],
+            [$bipId, $liquidhubId, $hubId, $bipId],
             [$bipId, $bigmacId, $usdxId, $bipId],
             [$bipId, $usdxId, $bigmacId, $bipId],
             [$bipId, $quotaId, $usdxId, $bipId],
@@ -170,6 +174,8 @@ class PoolsArbitrationCommand extends Command
             [$bipId, $rubxId, $hubId, $bipId],
             [$bipId, $rubxId, $rubtId, $bipId],
             [$bipId, $rubtId, $rubxId, $bipId],
+            [$bipId, $hubId, $liquidhubId, $bipId],
+            [$bipId, $liquidhubId, $hubId, $bipId],
             // fee 2.25 BIP
             [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
             [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
