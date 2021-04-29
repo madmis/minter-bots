@@ -166,6 +166,8 @@ class PoolsArbitrationCommand extends Command
             [$bipId, $quotaId, $bigmacId, $bipId],
             [$bipId, $bigmacId, $couponId, $bipId],
             [$bipId, $couponId, $bigmacId, $bipId],
+            [$bipId, $hubId, $rubxId, $bipId],
+            [$bipId, $rubxId, $hubId, $bipId],
             [$bipId, $rubxId, $rubtId, $bipId],
             [$bipId, $rubtId, $rubxId, $bipId],
             // fee 2.25 BIP
