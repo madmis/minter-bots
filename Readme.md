@@ -16,12 +16,12 @@ https://gate-api.minter.network/api/v2
 
 ```
 # HUB
-./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/'  --write-node='https://api.minter.one/v2/' --tx-amount=201 --pool-idx=0 |& tee -a ./var/log/pool-hub-0.txt &
+./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/'  --write-node='https://api.minter.one/v2/' --tx-amount=4353 --pool-idx=0 |& tee -a ./var/log/pool-hub-0.txt &
 # COUPON
-./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/'  --write-node='https://api.minter.one/v2/' --tx-amount=205 --pool-idx=1 |& tee -a ./var/log/pool-coupon-0.txt &
+./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/'  --write-node='https://api.minter.one/v2/' --tx-amount=4232 --pool-idx=1 |& tee -a ./var/log/pool-coupon-0.txt &
 # Other
-./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/'  --write-node='https://api.minter.one/v2/' --tx-amount=205 --pool-idx=2 |& tee -a ./var/log/pool-other-0.txt &
-./bin/console app:pool:arbitrate --read-node='https://mnt.funfasy.dev/v2/'  --write-node='https://mnt.funfasy.dev/v2/' --tx-amount=303 --req-delay=3000000 --pool-idx=1 |& tee -a ./var/log/pool-coupon-1.txt &
+./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/'  --write-node='https://api.minter.one/v2/' --tx-amount=4322 --pool-idx=2 |& tee -a ./var/log/pool-other-0.txt &
+./bin/console app:pool:arbitrate --read-node='https://mnt.funfasy.dev/v2/'  --write-node='https://mnt.funfasy.dev/v2/' --tx-amount=4555 --req-delay=3000000 --pool-idx=1 |& tee -a ./var/log/pool-coupon-1.txt &
 
 ```
 ./bin/console app:pool:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://gate-api.minter.network/api/v2/' --tx-amount=500 --pool-idx=0
