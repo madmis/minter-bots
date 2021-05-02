@@ -149,6 +149,8 @@ class PoolsArbitrationCommand extends Command
             0 => [
                 [$bipId, $hubId, $rubxId, $bipId],
                 [$bipId, $rubxId, $hubId, $bipId],
+                [$bipId, $hubId, $usdxId, $bipId],
+                [$bipId, $usdxId, $hubId, $bipId],
                 [$bipId, $hubId, $liquidhubId, $bipId],
                 [$bipId, $liquidhubId, $hubId, $bipId],
                 [$bipId, $hubId, $monsterHUBId, $bipId],
@@ -156,6 +158,8 @@ class PoolsArbitrationCommand extends Command
 
                 [$bipId, $monsterHUBId, $hubId, $rubxId, $bipId],
                 [$bipId, $liquidhubId, $hubId, $monsterHUBId, $bipId],
+                [$bipId, $quotaId, $usdxId, $hubId, $bipId],
+                [$bipId, $couponId, $usdxId, $hubId, $bipId],
             ],
             1 => [
                 [$bipId, $bigmacId, $couponId, $bipId],
