@@ -81,6 +81,7 @@ class PoolsArbitrationCommand extends Command
         $this
             ->setDescription('Arbitrate in Minter pools.')
             // 'https://mnt.funfasy.dev/v2/' - this node has a very low request limit. It's require min 3 sec delay;
+            // https://mnt.funfasy.dev/v0.2/ - req delay 2500000
             ->addOption(
                 'read-node',
                 null,
