@@ -129,6 +129,13 @@ class PoolsArbitrationCommand extends Command
         $hubId = 1902;
         $liquidhubId = 1893;
         $monsterHUBId = 1895;
+        $hubabubaId = 1942;
+        $capId = 1934;
+        $monehubId = 1901;
+        $hubchainId = 1900;
+        $trustHubId = 1903;
+        $academicId = 122;
+        $imperialId = 1937;
         $tickers = [
             $bipId => 'BIP',
             $bigmacId => 'BIGMAC',
@@ -145,6 +152,13 @@ class PoolsArbitrationCommand extends Command
             $rubtId => 'RUBT',
             $liquidhubId => 'LIQUIDHUB',
             $monsterHUBId => 'MonsterHUB',
+            $hubabubaId => 'HUBABUBA',
+            $capId => 'CAP',
+            $monehubId => 'MONEHUB',
+            $hubchainId => 'HUBCHAIN',
+            $trustHubId => 'TRUSTHUB',
+            $academicId => 'ACADEMIC',
+            $imperialId => 'IMPERIAL',
         ];
         $pools = [
             0 => [
@@ -156,11 +170,29 @@ class PoolsArbitrationCommand extends Command
                 [$bipId, $liquidhubId, $hubId, $bipId],
                 [$bipId, $hubId, $monsterHUBId, $bipId],
                 [$bipId, $monsterHUBId, $hubId, $bipId],
+                [$bipId, $hubabubaId, $hubId, $bipId],
+                [$bipId, $hubId, $hubabubaId, $bipId],
+                [$bipId, $hubId, $capId, $bipId],
+                [$bipId, $capId, $hubId, $bipId],
+                [$bipId, $monehubId, $hubId, $bipId],
+                [$bipId, $hubId, $monehubId, $bipId],
+                [$bipId, $hubId, $hubchainId, $bipId],
+                [$bipId, $hubchainId, $hubId, $bipId],
+                [$bipId, $academicId, $hubId, $bipId],
+                [$bipId, $hubId, $academicId, $bipId],
+                [$bipId, $imperialId, $hubId, $bipId],
 
                 [$bipId, $monsterHUBId, $hubId, $rubxId, $bipId],
+                [$bipId, $rubxId, $hubId, $liquidhubId, $bipId],
                 [$bipId, $liquidhubId, $hubId, $monsterHUBId, $bipId],
+                [$bipId, $liquidhubId, $hubId, $usdxId, $bipId],
                 [$bipId, $quotaId, $usdxId, $hubId, $bipId],
                 [$bipId, $couponId, $usdxId, $hubId, $bipId],
+                [$bipId, $hubabubaId, $capId, $hubId, $bipId],
+                [$bipId, $capId, $hubabubaId, $hubId, $bipId],
+                [$bipId, $hubId, $capId, $hubabubaId, $bipId],
+                [$bipId, $liquidhubId, $hubId, $monehubId, $bipId],
+                [$bipId, $capId, $hubId, $rubxId, $bipId],
             ],
             1 => [
                 [$bipId, $bigmacId, $couponId, $bipId],
@@ -272,13 +304,13 @@ class PoolsArbitrationCommand extends Command
             'base_uri' => $readNodeUrl,
             'connect_timeout' => 15.0,
             'timeout' => 30.0,
-//            'proxy' => '159.8.114.34:8123',
+            //            'proxy' => '159.8.114.34:8123',
         ]);
         $writeClient = new Client([
             'base_uri' => $writeNodeUrl,
             'connect_timeout' => 15.0,
             'timeout' => 30.0,
-//            'proxy' => '159.8.114.34:8123',
+            //            'proxy' => '159.8.114.34:8123',
         ]);
 
         $readApi = new MinterAPI($readClient);
@@ -295,7 +327,8 @@ class PoolsArbitrationCommand extends Command
                         $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk);
                         $response = (array) $writeApi->send($signedTx);
                         $this->logger->info(sprintf('Route: %s', $routeStr));
-                        $this->logger->debug("\t", ['response' => (array) $response]);
+                        $this->logger->info("\t", ['response' => (array) $response]);
+                        $this->logger->info("\t", ['block' => $readApi->getStatus()->latest_block_height]);
 
                         // after successful tx change wallet to make new tx from new wallet
                         $walletIdx = $this->getNextWalletIdx($walletIdx);
