@@ -42,7 +42,7 @@ class WsSubscriberCommand extends Command
         $this
             ->setDescription('Subscribe to minter websocket.')
             ->addOption('req-delay', 'd', InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 200000)
-            ->addOption('tx-amounts', 'a', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Transaction amounts', [5000, 4000, 3000])
+            ->addOption('tx-amounts', 'a', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Transaction amounts', [3000, 2000, 1000])
             ->addOption(
                 'wallets-file',
                 null,
