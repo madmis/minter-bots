@@ -181,7 +181,8 @@ class PoolsArbitrationCommand extends Command
                 [$bipId, $academicId, $hubId, $bipId],
                 [$bipId, $hubId, $academicId, $bipId],
                 [$bipId, $imperialId, $hubId, $bipId],
-
+            ],
+            1 => [
                 [$bipId, $monsterHUBId, $hubId, $rubxId, $bipId],
                 [$bipId, $rubxId, $hubId, $liquidhubId, $bipId],
                 [$bipId, $liquidhubId, $hubId, $monsterHUBId, $bipId],
@@ -194,7 +195,7 @@ class PoolsArbitrationCommand extends Command
                 [$bipId, $liquidhubId, $hubId, $monehubId, $bipId],
                 [$bipId, $capId, $hubId, $rubxId, $bipId],
             ],
-            1 => [
+            2 => [
                 [$bipId, $bigmacId, $couponId, $bipId],
                 [$bipId, $couponId, $bigmacId, $bipId],
                 [$bipId, $bigmacId, $quotaId, $bipId],
@@ -216,7 +217,7 @@ class PoolsArbitrationCommand extends Command
                 [$bipId, $usdxId, $bigmacId, $couponId, $bipId],
                 [$bipId, $usdxId, $couponId, $bigmacId, $bipId],
             ],
-            2 => [
+            3 => [
                 [$bipId, $rubxId, $usdxId, $bipId],
                 [$bipId, $usdxId, $rubxId, $bipId],
                 [$bipId, $rubxId, $rubtId, $bipId],
@@ -240,60 +241,58 @@ class PoolsArbitrationCommand extends Command
                 [$bipId, $couponId, $usdxId, $rubxId, $bipId],
                 [$bipId, $rubxId, $usdxId, $couponId, $bipId],
             ],
+            4 => [
+                [$bipId, $bigmacId, $couponId, $bipId],
+                [$bipId, $couponId, $bigmacId, $bipId],
+                [$bipId, $bigmacId, $quotaId, $bipId],
+                [$bipId, $quotaId, $bigmacId, $bipId],
+                [$bipId, $hubId, $rubxId, $bipId],
+                [$bipId, $rubxId, $hubId, $bipId],
+                [$bipId, $hubId, $liquidhubId, $bipId],
+                [$bipId, $liquidhubId, $hubId, $bipId],
+                [$bipId, $bigmacId, $usdxId, $bipId],
+                [$bipId, $usdxId, $bigmacId, $bipId],
+                [$bipId, $quotaId, $usdxId, $bipId],
+                [$bipId, $usdxId, $quotaId, $bipId],
+                [$bipId, $rubxId, $usdxId, $bipId],
+                [$bipId, $usdxId, $rubxId, $bipId],
+                [$bipId, $usdxId, $couponId, $bipId],
+                [$bipId, $couponId, $usdxId, $bipId],
+                [$bipId, $microbId, $usdxId, $bipId],
+                [$bipId, $usdxId, $microbId, $bipId],
+                [$bipId, $ftmusdId, $usdxId, $bipId],
+                [$bipId, $usdxId, $ftmusdId, $bipId],
+                [$bipId, $usdxId, $latteinId, $bipId],
+                [$bipId, $latteinId, $usdxId, $bipId],
+                [$bipId, $freedomId, $ftmusdId, $bipId],
+                [$bipId, $ftmusdId, $freedomId, $bipId],
+                [$bipId, $bigmacId, $quotaId, $bipId],
+                [$bipId, $quotaId, $bigmacId, $bipId],
+                [$bipId, $bigmacId, $couponId, $bipId],
+                [$bipId, $couponId, $bigmacId, $bipId],
+                [$bipId, $hubId, $rubxId, $bipId],
+                [$bipId, $rubxId, $hubId, $bipId],
+                [$bipId, $rubxId, $rubtId, $bipId],
+                [$bipId, $rubtId, $rubxId, $bipId],
+                [$bipId, $hubId, $liquidhubId, $bipId],
+                [$bipId, $liquidhubId, $hubId, $bipId],
+                [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
+                [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
+                [$bipId, $quotaId, $bigmacId, $usdxId, $bipId],
+                [$bipId, $bigmacId, $quotaId, $usdxId, $bipId],
+                [$bipId, $couponId, $usdxId, $quotaId, $bipId],
+                [$bipId, $quotaId, $usdxId, $couponId, $bipId],
+                [$bipId, $usdxId, $bigmacId, $couponId, $bipId],
+                [$bipId, $usdxId, $couponId, $bigmacId, $bipId],
+                [$bipId, $bigmacId, $usdxId, $couponId, $bipId],
+                [$bipId, $bigmacId, $couponId, $usdxId, $bipId],
+                [$bipId, $couponId, $bigmacId, $usdxId, $bipId],
+                [$bipId, $couponId, $usdxId, $bigmacId, $bipId],
+                [$bipId, $couponId, $usdxId, $rubxId, $bipId],
+                [$bipId, $rubxId, $usdxId, $couponId, $bipId],
+            ]
         ];
 
-        $poolsToCheck = [
-            // fee 2 BIP
-            //            [$bipId, $bigmacId, $couponId, $bipId],
-            //            [$bipId, $couponId, $bigmacId, $bipId],
-            //            [$bipId, $bigmacId, $quotaId, $bipId],
-            //            [$bipId, $quotaId, $bigmacId, $bipId],
-            //            [$bipId, $hubId, $rubxId, $bipId],
-            //            [$bipId, $rubxId, $hubId, $bipId],
-            //            [$bipId, $hubId, $liquidhubId, $bipId],
-            //            [$bipId, $liquidhubId, $hubId, $bipId],
-            //            [$bipId, $bigmacId, $usdxId, $bipId],
-            //            [$bipId, $usdxId, $bigmacId, $bipId],
-            //            [$bipId, $quotaId, $usdxId, $bipId],
-            //            [$bipId, $usdxId, $quotaId, $bipId],
-            //            [$bipId, $rubxId, $usdxId, $bipId],
-            //            [$bipId, $usdxId, $rubxId, $bipId],
-            //            [$bipId, $usdxId, $couponId, $bipId],
-            //            [$bipId, $couponId, $usdxId, $bipId],
-            //            [$bipId, $microbId, $usdxId, $bipId],
-            //            [$bipId, $usdxId, $microbId, $bipId],
-            //            [$bipId, $ftmusdId, $usdxId, $bipId],
-            //            [$bipId, $usdxId, $ftmusdId, $bipId],
-            //            [$bipId, $usdxId, $latteinId, $bipId],
-            //            [$bipId, $latteinId, $usdxId, $bipId],
-            //            [$bipId, $freedomId, $ftmusdId, $bipId],
-            //            [$bipId, $ftmusdId, $freedomId, $bipId],
-            //            [$bipId, $bigmacId, $quotaId, $bipId],
-            //            [$bipId, $quotaId, $bigmacId, $bipId],
-            //            [$bipId, $bigmacId, $couponId, $bipId],
-            //            [$bipId, $couponId, $bigmacId, $bipId],
-            //            [$bipId, $hubId, $rubxId, $bipId],
-            //            [$bipId, $rubxId, $hubId, $bipId],
-            //            [$bipId, $rubxId, $rubtId, $bipId],
-            //            [$bipId, $rubtId, $rubxId, $bipId],
-            //            [$bipId, $hubId, $liquidhubId, $bipId],
-            //            [$bipId, $liquidhubId, $hubId, $bipId],
-            // fee 2.25 BIP
-            //            [$bipId, $bigmacId, $usdxId, $quotaId, $bipId],
-            //            [$bipId, $quotaId, $usdxId, $bigmacId, $bipId],
-            //            [$bipId, $quotaId, $bigmacId, $usdxId, $bipId],
-            //            [$bipId, $bigmacId, $quotaId, $usdxId, $bipId],
-            //            [$bipId, $couponId, $usdxId, $quotaId, $bipId],
-            //            [$bipId, $quotaId, $usdxId, $couponId, $bipId],
-            //            [$bipId, $usdxId, $bigmacId, $couponId, $bipId],
-            //            [$bipId, $usdxId, $couponId, $bigmacId, $bipId],
-            //            [$bipId, $bigmacId, $usdxId, $couponId, $bipId],
-            //            [$bipId, $bigmacId, $couponId, $usdxId, $bipId],
-            //            [$bipId, $couponId, $bigmacId, $usdxId, $bipId],
-            //            [$bipId, $couponId, $usdxId, $bigmacId, $bipId],
-            //            [$bipId, $couponId, $usdxId, $rubxId, $bipId],
-            //            [$bipId, $rubxId, $usdxId, $couponId, $bipId],
-        ];
         $readNodeUrl = $input->getOption('read-node');
         $writeNodeUrl = $input->getOption('write-node');
         $txAmount = (int) $input->getOption('tx-amount');
@@ -341,6 +340,8 @@ class PoolsArbitrationCommand extends Command
                             $walletIdx,
                             $walletAddress,
                         ));
+
+                        usleep($reqDelay);
                     } catch (ClientException $e) {
                         $response = $e->getResponse();
                         $content = $response->getBody()->getContents();
@@ -363,6 +364,8 @@ class PoolsArbitrationCommand extends Command
                                 'code' => $e->getLine(),
                             ]);
                         }
+
+                        usleep($reqDelay);
                     }
                 } catch (ServerException $e) {
                     $this->logger->critical(sprintf(
@@ -380,8 +383,6 @@ class PoolsArbitrationCommand extends Command
 
                     sleep(10);
                 }
-
-                usleep($reqDelay);
             }
 
             sleep(2);

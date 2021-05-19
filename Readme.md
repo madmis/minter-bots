@@ -33,3 +33,33 @@ https://gate-api.minter.network/api/v2
 * https://mnt.funfasy.dev/v2/ - this node has a very low request limit. It's requirement min 3 sec delay;
 * https://api.minter.one/v2/
 * https://gate-api.minter.network/api/v2/ - Write node only.
+
+## Coins
+
+* BIP: 0
+* BIGMAC: 907
+* USDX: 1678
+* QUOTA: 1086
+* COUPON: 1043
+* RUBX: 1784
+* FTMUSD: 1048
+* MINTERPAY: 133
+* MICROB: 1087
+* LATTEIN: 1036
+* FREEDOM: 21
+* HUB: 1902
+* RUBT: 1054
+* LIQUIDHUB: 1893
+* MonsterHUB: 1895
+* HUBABUBA: 1942
+* CAP: 1934
+* MONEHUB: 1901
+* HUBCHAIN: 1900
+* TRUSTHUB: 1903
+* ACADEMIC: 122
+* IMPERIAL: 1937
+
+./bin/console app:one-pool:arbitrate  --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' --tx-amount=3867 --req-delay=500000 --wallet-idx=0 -f ./resources/pools/hub-liquidhub.json -f ./resources/pools/hub-monsterhub.json -f ./resources/pools/hub-rubx.json
+./bin/console app:one-pool:arbitrate  --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' --tx-amount=3687 --req-delay=500000 --wallet-idx=0 -f ./resources/pools/hub-cap.json -f ./resources/pools/hub-hubabuba.json  -f ./resources/pools/hub-hubchain.json -f ./resources/pools/hub-monehub.json -f ./resources/pools/hub-usdx.json -vvv
+
+/var/www/ccbip/bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' --req-delay=0' -a 1000 -a 1500 -a 2000 -i 3 -p FTMUSD -vvv

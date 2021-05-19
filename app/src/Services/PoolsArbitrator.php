@@ -91,29 +91,25 @@ class PoolsArbitrator
         foreach ($routes as $route) {
             try {
                 try {
-                    $this->logger->info('R: {route}', [
-                        'route' => implode('=>', array_map(
-                            static fn(CoinDto $coin) => $coin->getSymbol(),
-                            $route,
-                        )),
-                    ]);
+                    $r = implode('=>', array_map(
+                        static fn(CoinDto $coin) => $coin->getSymbol(),
+                        $route,
+                    ));
+//                    $this->logger->info("R: {$r}");
+//                    $this->logger->info("W: {$walletAddress}");
+
                     $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk);
                     $response = $writeApi->send($signedTx);
-                    $this->logger->info('R: {route}', [
-                        'response' => $response,
-                        'route' => implode('=>', array_map(
-                            static fn(CoinDto $coin) => $coin->getSymbol(),
-                            $route,
-                        )),
-                    ]);
+                    $this->logger->info("R: {$r}");
+                    $this->logger->info("\t", ['response' => (array) $response]);
+                    $this->logger->info("\t", ['block' => $readApi->getStatus()->latest_block_height]);
+
                     // after successful tx change wallet to make new tx from new wallet
+                    $oldWallet = $walletAddress;
                     $walletIdx = isset($wallets[$walletIdx + 1]) ? $walletIdx + 1 : 0;
                     $walletAddress = $wallets[$walletIdx]['wallet'];
                     $walletPk = $wallets[$walletIdx]['pk'];
-                    $this->logger->info("\tChange wallet to: {walletIdx}: {walletAddress}", [
-                        'walletIdx' => $walletIdx,
-                        'walletAddress' => $walletAddress,
-                    ]);
+                    $this->logger->info(sprintf("\tChange wallet from %s => to: %s: %s", $oldWallet, $walletIdx, $walletAddress));
                     usleep($reqDelay);
                 } catch (ClientException $e) {
                     $response = $e->getResponse();
@@ -123,34 +119,35 @@ class PoolsArbitrator
 
                     if (!empty($data['error']['code']) && (int) $data['error']['code'] === 302) {
                         $errorData = $data['error']['data'];
-                        $this->logger->debug('Want: {maxValToSell}. Got: {neededSpendVal}. Coin: {coinSymbol}', [
-                            'maxValToSell' => $errorData['maximum_value_to_sell'],
-                            'neededSpendVal' => $errorData['needed_spend_value'],
-                            'coinSymbol' => $errorData['coin_symbol'],
-                        ]);
+                        $this->logger->debug(sprintf(
+                            'Want: %s. Got: %s. Coin: %s',
+                            $errorData['maximum_value_to_sell'],
+                            $errorData['needed_spend_value'],
+                            $errorData['coin_symbol'],
+                        ));
                     } else {
                         $this->logger->error($e->getMessage(), [
                             'content' => $e->getResponse()->getBody()->getContents(),
-                            'message' => $e->getMessage(),
                             'class' => $e::class,
                             'file' => $e->getFile(),
                             'code' => $e->getLine(),
                         ]);
                     }
+                    usleep($reqDelay);
                 }
             } catch (ServerException $e) {
-                $this->logger->critical('{code}: {phrase}', [
-                    'code' => $e->getResponse()->getStatusCode(),
-                    'phrase' => $e->getResponse()->getReasonPhrase(),
-                ]);
+//                $this->logger->critical(sprintf(
+//                    '%s: %s',
+//                    $e->getResponse()->getStatusCode(),
+//                    $e->getResponse()->getReasonPhrase(),
+//                ));
                 sleep(2);
             } catch (GuzzleException $e) {
-                $this->logger->critical($e->getMessage(), [
-                    'message' => $e->getMessage(),
-                    'class' => $e::class,
-                    'file' => $e->getFile(),
-                    'code' => $e->getLine(),
-                ]);
+//                $this->logger->critical($e->getMessage(), [
+//                    'class' => $e::class,
+//                    'file' => $e->getFile(),
+//                    'code' => $e->getLine(),
+//                ]);
 
                 sleep(10);
             }
