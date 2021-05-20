@@ -71,6 +71,14 @@ class NamedPoolsArbitrationCommand extends Command
             ->addOption('tx-amounts', 'a', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Transaction amounts', [3847])
             ->addOption('iterations', 'i', InputOption::VALUE_REQUIRED, 'Iterations count to repeat requests in the pools', 3)
             ->addOption('pools', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Pools (Coin symbol)', [])
+            ->addOption('custom-coin-pool', null, InputOption::VALUE_NONE, "Set if it's custom coin pool")
+            ->addOption(
+                'one-bip-in-custom-coin-price',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'If pool with not BIP as goal, set one bip price in this coin to properly calculate fee',
+                10000000.00
+            )
             ->addOption(
                 'wallets-file',
                 null,
@@ -94,6 +102,8 @@ class NamedPoolsArbitrationCommand extends Command
         $walletsFile = $input->getOption('wallets-file');
         $iterations = (int) $input->getOption('iterations');
         $pools = $input->getOption('pools');
+        $isCustomRoute = (bool) $input->getOption('custom-coin-pool');
+        $oneBipInCustomCoinPrice = (float) $input->getOption('one-bip-in-custom-coin-price');
 
         $arbitrator = new PoolsArbitrator($this->logger);
 
@@ -119,6 +129,8 @@ class NamedPoolsArbitrationCommand extends Command
                 $reqDelay,
                 0,
                 $wallets,
+                $isCustomRoute,
+                $oneBipInCustomCoinPrice,
             );
         }
 

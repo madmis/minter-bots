@@ -35,10 +35,12 @@ class PoolsArbitrator
      * signTx.
      *
      * @param array $route
-     * @param int $txAmount
+     * @param float $txAmount
      * @param MinterAPI $api
      * @param string $walletAddress
      * @param string $walletPk
+     * @param bool $isCustomRoute
+     * @param float $oneBipInCustomCoinPrice
      *
      * @return string
      * @noinspection PhpDocMissingThrowsInspection
@@ -46,16 +48,26 @@ class PoolsArbitrator
      */
     private function signTx(
         array $route,
-        int $txAmount,
+        float $txAmount,
         MinterAPI $api,
         string $walletAddress,
-        string $walletPk
+        string $walletPk,
+        bool $isCustomRoute = false,
+        float $oneBipInCustomCoinPrice = 0.0
     ) : string {
-        $fee = count($route) > 4 ? 2 + ((count($route)-4) * 0.25) : 2;
+        $fee = count($route) > 4 ? 2 + ((count($route) - 4) * 0.25) : 2;
+
+        if ($isCustomRoute) {
+            $fee *= $oneBipInCustomCoinPrice;
+        }
+
+        $minGetAmount = $txAmount + $fee;
+        $this->logger->debug("\tAmount: {$txAmount}. Min get amount: {$minGetAmount}");
+
         $data = new MinterSellSwapPoolTx(
             array_map(static fn(CoinDto $coin) => $coin->getId(), $route),
             $txAmount,
-            $txAmount + $fee
+            $minGetAmount
         );
         $nonce = $api->getNonce($walletAddress);
         $tx = new MinterTx($nonce, $data);
@@ -67,23 +79,27 @@ class PoolsArbitrator
      * arbitrate.
      *
      * @param CoinDto[][] $routes
-     * @param int $txAmount
+     * @param float $txAmount
      * @param MinterAPI $readApi
      * @param MinterAPI $writeApi
      * @param int $reqDelay
      * @param int $walletIdx
      * @param array $wallets
+     * @param bool $isCustomRoute
+     * @param float $oneBipInCustomCoinPrice
      *
      * @return void
      */
     public function arbitrate(
         array $routes,
-        int $txAmount,
+        float $txAmount,
         MinterAPI $readApi,
         MinterAPI $writeApi,
         int $reqDelay,
         int $walletIdx,
         array $wallets,
+        bool $isCustomRoute = false,
+        float $oneBipInCustomCoinPrice = 0.0
     ) : void {
         $walletAddress = $wallets[$walletIdx]['wallet'];
         $walletPk = $wallets[$walletIdx]['pk'];
@@ -95,10 +111,10 @@ class PoolsArbitrator
                         static fn(CoinDto $coin) => $coin->getSymbol(),
                         $route,
                     ));
-//                    $this->logger->info("R: {$r}");
+                    $this->logger->debug("R: {$r}");
 //                    $this->logger->info("W: {$walletAddress}");
 
-                    $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk);
+                    $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk, $isCustomRoute, $oneBipInCustomCoinPrice);
                     $response = $writeApi->send($signedTx);
                     $this->logger->info("R: {$r}");
                     $this->logger->info("\t", ['response' => (array) $response]);
@@ -120,7 +136,7 @@ class PoolsArbitrator
                     if (!empty($data['error']['code']) && (int) $data['error']['code'] === 302) {
                         $errorData = $data['error']['data'];
                         $this->logger->debug(sprintf(
-                            'Want: %s. Got: %s. Coin: %s',
+                            'Want: %.02f - Got: %.02f => Coin: %s',
                             $errorData['maximum_value_to_sell'],
                             $errorData['needed_spend_value'],
                             $errorData['coin_symbol'],
