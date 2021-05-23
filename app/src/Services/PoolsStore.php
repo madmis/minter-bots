@@ -65,6 +65,7 @@ class PoolsStore
         $yankee = new CoinDto(1074, 'YANKEE');
         $moneHub = new CoinDto(1901, 'MONEHUB');
         $lp59 = new CoinDto(1905, 'LP-59');
+        $lambo = new CoinDto(1979, 'LAMBO');
 
         return [
             'CUSTOM-HUB' => [
@@ -89,6 +90,14 @@ class PoolsStore
                 [$hub, $moneHub, $liquidHub, $bip, $hub],
                 [$hub, $microb, $bip, $hub],
                 [$hub, $bip, $microb, $hub],
+                [$hub, $lambo, $bip, $hub],
+                [$hub, $bip, $lambo, $hub],
+                [$hub, $rubx, $bip, $lambo, $hub],
+                [$hub, $lambo, $bip, $liquidHub, $hub],
+            ],
+            'LAMBO' => [
+                [$bip, $hub, $lambo, $bip],
+                [$bip, $lambo, $hub, $bip],
             ],
             'MONEHUB' => [
                 [$bip, $hub, $moneHub, $bip],
@@ -169,6 +178,8 @@ class PoolsStore
                 [$bip, $cap, $hub, $bip],
                 [$bip, $microb, $hub, $bip],
                 [$bip, $hub, $microb, $bip],
+                [$bip, $hub, $lambo, $bip],
+                [$bip, $lambo, $hub, $bip],
             ],
             'MONSTERHUB' => [
                 [$bip, $monsterHub, $hub, $bip],

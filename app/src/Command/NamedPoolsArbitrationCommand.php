@@ -121,13 +121,14 @@ class NamedPoolsArbitrationCommand extends Command
 
         for ($i = 0; $i < $iterations; $i++) {
             $this->logger->debug("Iteration: {$i}");
+            $walletIdx = array_rand($wallets);
             $arbitrator->arbitrate(
                 $routes,
                 array_rand(array_flip($txAmounts)),
                 $readApi,
                 $writeApi,
                 $reqDelay,
-                0,
+                $walletIdx,
                 $wallets,
                 $isCustomRoute,
                 $oneBipInCustomCoinPrice,
