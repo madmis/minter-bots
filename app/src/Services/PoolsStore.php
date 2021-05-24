@@ -37,6 +37,9 @@ class PoolsStore
             1074 => new CoinDto(1074, 'YANKEE'),
             1901 => new CoinDto(1901, 'MONEHUB'),
             1905 => new CoinDto(1905, 'LP-59'),
+            1979 => new CoinDto(1979, 'LAMBO'),
+            1990 => new CoinDto(1990, 'FERRARI'),
+            2009 => new CoinDto(2009, 'FERRA'),
         ];
     }
 
@@ -66,10 +69,66 @@ class PoolsStore
         $moneHub = new CoinDto(1901, 'MONEHUB');
         $lp59 = new CoinDto(1905, 'LP-59');
         $lambo = new CoinDto(1979, 'LAMBO');
+        $ferrari = new CoinDto(1990, 'FERRARI');
+        $ferra = new CoinDto(2009, 'FERRA');
+        $usdte = new CoinDto(1993, 'USDTE');
+        $usdce = new CoinDto(1994, 'USDCE');
 
         return [
+            'CUSTOM-MICROB' => [
+                [$microb, $usdx, $bip, $microb],
+                [$microb, $hub, $bip, $microb],
+                [$microb, $hub, $usdx, $microb],
+                [$microb, $quota, $usdx, $microb],
+                [$microb, $hubabuba, $hub, $usdx, $microb],
+                [$microb, $hub, $hubabuba, $bip, $microb],
+                [$microb, $bip, $hubabuba, $hub, $microb],
+            ],
+            'FERRARI' => [
+                [$bip, $ferrari, $monsterHub, $bip],
+                [$bip, $monsterHub, $ferrari, $bip],
+                [$bip, $ferrari, $lambo, $bip],
+                [$bip, $lambo, $ferrari, $bip],
+                //                [$bip, $lambo, $ferra, $bip],
+            ],
+            'CUSTOM-USDX' => [
+                [$usdx, $bigmac, $coupon, $usdx],
+                [$usdx, $bigmac, $bip, $usdx],
+                [$usdx, $coupon, $bip, $usdx],
+                [$usdx, $quota, $coupon, $usdx],
+                [$usdx, $quota, $bip, $usdx],
+                [$usdx, $microb, $bip, $usdx],
+                [$usdx, $yankee, $bip, $usdx],
+                [$usdx, $ftmusd, $bip, $usdx],
+                [$usdx, $bip, $bigmac, $coupon, $usdx],
+                [$usdx, $bigmac, $bip, $coupon, $usdx],
+                [$usdx, $coupon, $bip, $bigmac, $usdx],
+                [$usdx, $coupon, $bigmac, $usdx],
+                [$usdx, $bip, $yankee, $usdx],
+                [$usdx, $bip, $ftmusd, $usdx],
+                [$usdx, $bip, $microb, $usdx],
+                [$usdx, $bip, $bigmac, $usdx],
+                [$usdx, $bip, $coupon, $usdx],
+                [$usdx, $coupon, $quota, $usdx],
+                [$usdx, $bip, $quota, $usdx],
+            ],
+            'CUSTOM-BIGMAC' => [
+                [$bigmac, $usdx, $coupon, $bigmac],
+                [$bigmac, $coupon, $usdx, $bigmac],
+                [$bigmac, $usdx, $bip, $coupon, $bigmac],
+                [$bigmac, $coupon, $bip, $usdx, $bigmac],
+                [$bigmac, $bip, $coupon, $bigmac],
+                [$bigmac, $coupon, $bip, $bigmac],
+                [$bigmac, $quota, $usdx, $bigmac],
+                [$bigmac, $quota, $coupon, $bigmac],
+                [$bigmac, $quota, $bip, $bigmac],
+                [$bigmac, $coupon, $microb, $usdx, $bigmac],
+                [$bigmac, $usdx, $hub, $bip, $bigmac],
+            ],
             'CUSTOM-HUB' => [
                 [$hub, $bip, $lp59, $hub],
+                [$hub, $usdte, $bip, $hub],
+                [$hub, $bip, $usdte, $hub],
                 [$hub, $lp59, $bip, $hub],
                 [$hub, $hubChain, $bip, $hub],
                 [$hub, $bip, $hubChain, $hub],
@@ -180,6 +239,8 @@ class PoolsStore
                 [$bip, $hub, $microb, $bip],
                 [$bip, $hub, $lambo, $bip],
                 [$bip, $lambo, $hub, $bip],
+                [$bip, $hub, $usdte, $bip],
+                [$bip, $usdte, $hub, $bip],
             ],
             'MONSTERHUB' => [
                 [$bip, $monsterHub, $hub, $bip],
