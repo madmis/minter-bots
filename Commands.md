@@ -76,8 +76,8 @@ OR
     --custom-coin-pool --one-bip-in-custom-coin-price=0.00008 |& tee -a ./var/log/custom-hub.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 110 --req-delay=0 -i 10000000 -p CUSTOM-MICROB
-    --wallets-file=/var/www/ccbip/resources/wallets/4e4557-5d097c-858cfa.json
+    -a 110 --req-delay=0 -i 10000000 -p CUSTOM-MICROB \
+    --wallets-file=/var/www/ccbip/resources/wallets/4e4557-5d097c-858cfa.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.5 |& tee -a ./var/log/custom-microb.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
