@@ -75,6 +75,15 @@ class PoolsStore
         $usdce = new CoinDto(1994, 'USDCE');
 
         return [
+            'USDTE' => [
+                [$bip, $usdte, $usdx, $hub, $bip],
+                [$bip, $usdte, $usdx, $bip],
+                [$bip, $usdte, $usdce, $bip],
+                [$bip, $usdce, $usdte, $bip],
+                [$bip, $usdce, $usdte, $hub, $bip],
+                [$bip, $hub, $usdte, $bip],
+                [$bip, $hub, $usdte, $usdce, $bip],
+            ],
             'CUSTOM-MICROB' => [
                 [$microb, $usdx, $bip, $microb],
                 [$microb, $hub, $bip, $microb],
@@ -92,6 +101,9 @@ class PoolsStore
                 //                [$bip, $lambo, $ferra, $bip],
             ],
             'CUSTOM-USDX' => [
+                [$usdx, $usdte, $hub, $usdx],
+                [$usdx, $usdte, $bip, $usdx],
+                [$usdx, $usdte, $bip, $hub, $usdx],
                 [$usdx, $bigmac, $coupon, $usdx],
                 [$usdx, $bigmac, $bip, $usdx],
                 [$usdx, $coupon, $bip, $usdx],
