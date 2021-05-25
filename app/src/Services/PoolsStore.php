@@ -75,6 +75,19 @@ class PoolsStore
         $usdce = new CoinDto(1994, 'USDCE');
 
         return [
+            'CUSTOM-USDTE' => [
+                [$usdte, $bip, $usdx, $usdte],
+                [$usdte, $hub, $usdx, $usdte],
+                [$usdte, $hub, $hubabuba, $bip, $usdte],
+                [$usdte, $hub, $monsterHub, $bip, $usdte],
+                [$usdte, $hub, $lambo, $bip, $usdte],
+                [$usdte, $hub, $hubChain, $bip, $usdte],
+                [$usdte, $hub, $liquidHub, $bip, $usdte],
+                [$usdte, $hub, $moneHub, $bip, $usdte],
+                [$usdte, $hub, $cap, $bip, $usdte],
+                [$usdte, $usdce, $hub, $usdte],
+                [$usdte, $usdx, $bip, $usdte],
+            ],
             'USDTE' => [
                 [$bip, $usdte, $usdx, $hub, $bip],
                 [$bip, $usdte, $usdx, $bip],
