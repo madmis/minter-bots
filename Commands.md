@@ -109,4 +109,9 @@ OR
     -a 0.1 --req-delay=0 -i 10000000 -p CUSTOM-LIQUIDHUB \
     --wallets-file=/var/www/ccbip/resources/wallets/Mx08ae486eee85c7dd83f2f6972f614965110ebb60.json\
     --custom-coin-pool --one-bip-in-custom-coin-price=0.0001 |& tee -a ./var/log/custom-liquidhub.txt &
+    
+./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
+    -a 0.1 --req-delay=0 -i 10000000 -p CUSTOM-MONSTERHUB \
+    --wallets-file=/var/www/ccbip/resources/wallets/Mx08ae486eee85c7dd83f2f6972f614965110ebb60.json \
+    --custom-coin-pool --one-bip-in-custom-coin-price=0.0001 |& tee -a ./var/log/custom-monsterhub.txt &
 ```
