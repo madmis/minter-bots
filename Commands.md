@@ -31,24 +31,35 @@ OR
 ```
 
 
+
+
+
+#################################################
+
+
 ### Currently run on the prod
 
 ```
 ./bin/ws-loop.sh |& tee -a ./var/log/websocket.txt &
 
-./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 3200 -a 2200 -a 1200 --req-delay=0 -i 10000000 -p HUB -p MONSTERHUB -p MICROB -p CAP -p HUBCHAIN -p MONEHUB -p USDX \
-    --wallets-file=/var/www/ccbip/resources/wallets/4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 ``` 
 
-###
+### BIP
 ```
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 995 --req-delay=0 -i 10000000 -p LIQUIDHUB -p HUBABUBA -p BIGMAC -p COUPON -p QUOTA -p MICROB -p LAMBO -p RUBX -p USDTE \
-    --wallets-file=/var/www/ccbip/resources/wallets/0ebb60-be1564.json |& tee -a ./var/log/3.txt &
+    -a 7000 -a 6900 -a 6800 --req-delay=0 -i 10000000 -p HUB -p MONSTERHUB -p MICROB -p CAP -p HUBCHAIN -p MONEHUB -p USDX \
+    --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
+
+./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
+    -a 5800 -a 5700 -a 5600 --req-delay=0 -i 10000000 -p LIQUIDHUB -p HUBABUBA -p BIGMAC -p COUPON -p QUOTA -p MICROB -p LAMBO -p RUBX -p USDTE \
+    --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/2.txt &
+
+./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
+    -a 980 -a 970 -a 960 --req-delay=0 -i 10000000 -p MUSD -p FERRARI -p YANKEE -p FTMUSD -p FREEDOM  \
+    --wallets-file=/var/www/ccbip/resources/wallets/4-f94060-3c0965.json |& tee -a ./var/log/3.txt &
 ```
 
-###
+### CUSTOM
 ```
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
     -a 0.27 --req-delay=0 -i 10000000 -p CUSTOM-HUB \

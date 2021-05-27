@@ -73,6 +73,7 @@ class PoolsStore
         $ferra = new CoinDto(2009, 'FERRA');
         $usdte = new CoinDto(1993, 'USDTE');
         $usdce = new CoinDto(1994, 'USDCE');
+        $musd = new CoinDto(2024, 'MUSD');
 
         return [
             'CUSTOM-MONEHUB' => [
@@ -135,31 +136,6 @@ class PoolsStore
                 [$usdte, $hub, $cap, $bip, $usdte],
                 [$usdte, $usdce, $hub, $usdte],
                 [$usdte, $usdx, $bip, $usdte],
-            ],
-            'USDTE' => [
-                [$bip, $usdte, $usdx, $hub, $bip],
-                [$bip, $usdte, $usdx, $bip],
-                [$bip, $usdte, $usdce, $bip],
-                [$bip, $usdce, $usdte, $bip],
-                [$bip, $usdce, $usdte, $hub, $bip],
-                [$bip, $hub, $usdte, $bip],
-                [$bip, $hub, $usdte, $usdce, $bip],
-            ],
-            'CUSTOM-MICROB' => [
-                [$microb, $usdx, $bip, $microb],
-                [$microb, $hub, $bip, $microb],
-                [$microb, $hub, $usdx, $microb],
-                [$microb, $quota, $usdx, $microb],
-                [$microb, $hubabuba, $hub, $usdx, $microb],
-                [$microb, $hub, $hubabuba, $bip, $microb],
-                [$microb, $bip, $hubabuba, $hub, $microb],
-            ],
-            'FERRARI' => [
-                [$bip, $ferrari, $monsterHub, $bip],
-                [$bip, $monsterHub, $ferrari, $bip],
-                [$bip, $ferrari, $lambo, $bip],
-                [$bip, $lambo, $ferrari, $bip],
-                //                [$bip, $lambo, $ferra, $bip],
             ],
             'CUSTOM-USDX' => [
                 [$usdx, $usdte, $hub, $usdx],
@@ -227,6 +203,44 @@ class PoolsStore
                 [$hub, $rubx, $bip, $lambo, $hub],
                 [$hub, $lambo, $bip, $liquidHub, $hub],
             ],
+            'CUSTOM-MICROB' => [
+                [$microb, $usdx, $bip, $microb],
+                [$microb, $hub, $bip, $microb],
+                [$microb, $hub, $usdx, $microb],
+                [$microb, $quota, $usdx, $microb],
+                [$microb, $hubabuba, $hub, $usdx, $microb],
+                [$microb, $hub, $hubabuba, $bip, $microb],
+                [$microb, $bip, $hubabuba, $hub, $microb],
+            ],
+            'MUSD' => [
+                [$bip, $musd, $usdte, $hub, $bip],
+                [$bip, $usdte, $musd, $hub, $bip],
+                [$bip, $hub, $usdte, $musd, $bip],
+                [$bip, $musd, $hub, $bip],
+                [$bip, $hub, $musd, $bip],
+                [$bip, $usdte, $musd, $bip],
+                [$bip, $musd, $usdte, $bip],
+                [$bip, $musd, $usdce, $bip],
+                [$bip, $usdce, $musd, $bip],
+                [$bip, $musd, $rubx, $bip],
+                [$bip, $rubx, $musd, $bip],
+            ],
+            'USDTE' => [
+                [$bip, $usdte, $usdx, $hub, $bip],
+                [$bip, $usdte, $usdx, $bip],
+                [$bip, $usdte, $usdce, $bip],
+                [$bip, $usdce, $usdte, $bip],
+                [$bip, $usdce, $usdte, $hub, $bip],
+                [$bip, $hub, $usdte, $bip],
+                [$bip, $hub, $usdte, $usdce, $bip],
+            ],
+            'FERRARI' => [
+                [$bip, $ferrari, $monsterHub, $bip],
+                [$bip, $monsterHub, $ferrari, $bip],
+                [$bip, $ferrari, $lambo, $bip],
+                [$bip, $lambo, $ferrari, $bip],
+                //                [$bip, $lambo, $ferra, $bip],
+            ],
             'LAMBO' => [
                 [$bip, $hub, $lambo, $bip],
                 [$bip, $lambo, $hub, $bip],
@@ -236,6 +250,10 @@ class PoolsStore
                 [$bip, $moneHub, $hub, $bip],
                 [$bip, $liquidHub, $moneHub, $bip],
                 [$bip, $moneHub, $liquidHub, $bip],
+                [$bip, $monsterHub, $liquidHub, $moneHub, $bip],
+                [$bip, $moneHub, $liquidHub, $monsterHub, $bip],
+                [$bip, $hub, $moneHub, $liquidHub, $bip],
+                [$bip, $liquidHub, $moneHub, $hub, $bip],
             ],
             'YANKEE' => [
                 [$bip, $usdx, $yankee, $bip],
@@ -318,6 +336,13 @@ class PoolsStore
             'MONSTERHUB' => [
                 [$bip, $monsterHub, $hub, $bip],
                 [$bip, $hub, $monsterHub, $bip],
+                [$bip, $monsterHub, $liquidHub, $hub, $bip],
+                [$bip, $liquidHub, $hub, $monsterHub, $bip],
+                [$bip, $monsterHub, $hub, $bip],
+                [$bip, $usdte, $hub, $monsterHub, $bip],
+                [$bip, $musd, $hub, $monsterHub, $bip],
+                [$bip, $usdce, $hub, $monsterHub, $bip],
+                [$bip, $usdx, $hub, $monsterHub, $bip],
             ],
             'HUBCHAIN' => [
                 [$bip, $hubChain, $hub, $bip],
@@ -326,6 +351,10 @@ class PoolsStore
             'LIQUIDHUB' => [
                 [$bip, $hub, $liquidHub, $bip],
                 [$bip, $liquidHub, $hub, $bip],
+                [$bip, $usdte, $hub, $liquidHub, $bip],
+                [$bip, $musd, $hub, $liquidHub, $bip],
+                [$bip, $usdce, $hub, $liquidHub, $bip],
+                [$bip, $usdx, $hub, $liquidHub, $bip],
             ],
             'CAP' => [
                 [$bip, $hub, $cap, $bip],
@@ -334,10 +363,24 @@ class PoolsStore
             'HUBABUBA' => [
                 [$bip, $hub, $hubabuba, $bip],
                 [$bip, $hubabuba, $hub, $bip],
+                [$bip, $rubx, $hubabuba, $bip],
+                [$bip, $hubabuba, $rubx, $bip],
+                [$bip, $hubabuba, $microb, $bip],
+                [$bip, $microb, $hubabuba, $bip],
+                [$bip, $hubabuba, $cap, $bip],
+                [$bip, $cap, $hubabuba, $bip],
+                [$bip, $usdce, $hub, $hubabuba, $bip],
+                [$bip, $usdte, $hub, $hubabuba, $bip],
+                [$bip, $musd, $hub, $hubabuba, $bip],
+                [$bip, $usdx, $hub, $hubabuba, $bip],
             ],
             'RUBX' => [
                 [$bip, $hub, $rubx, $bip],
                 [$bip, $rubx, $hub, $bip],
+                [$bip, $usdce, $hub, $rubx, $bip],
+                [$bip, $usdte, $hub, $rubx, $bip],
+                [$bip, $musd, $hub, $rubx, $bip],
+                [$bip, $usdx, $hub, $rubx, $bip],
             ],
         ];
     }
