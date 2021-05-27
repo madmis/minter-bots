@@ -157,7 +157,7 @@ class PoolsArbitrator
 //                    $e->getResponse()->getStatusCode(),
 //                    $e->getResponse()->getReasonPhrase(),
 //                ));
-                sleep(2);
+                sleep(1);
             } catch (GuzzleException $e) {
 //                $this->logger->critical($e->getMessage(), [
 //                    'class' => $e::class,
@@ -165,7 +165,7 @@ class PoolsArbitrator
 //                    'code' => $e->getLine(),
 //                ]);
 
-                sleep(10);
+                sleep(3);
             }
         }
     }

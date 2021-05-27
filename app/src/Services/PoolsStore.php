@@ -75,8 +75,34 @@ class PoolsStore
         $usdce = new CoinDto(1994, 'USDCE');
         $musd = new CoinDto(2024, 'MUSD');
         $gold = new CoinDto(2058, 'GOLD');
+        $btc = new CoinDto(2064, 'BTC');
+        $eth = new CoinDto(2065, 'ETH');
 
         return [
+            'BTC' => [
+                [$bip, $usdte, $btc, $bip],
+                [$bip, $btc, $usdte, $bip],
+                [$bip, $usdce, $btc, $bip],
+                [$bip, $btc, $usdce, $bip],
+                [$bip, $musd, $btc, $bip],
+                [$bip, $btc, $musd, $bip],
+                [$bip, $hub, $btc, $bip],
+                [$bip, $btc, $hub, $bip],
+                [$bip, $btc, $eth, $bip],
+                [$bip, $eth, $btc, $bip],
+            ],
+            'ETH' => [
+                [$bip, $usdte, $eth, $bip],
+                [$bip, $eth, $usdte, $bip],
+                [$bip, $usdce, $eth, $bip],
+                [$bip, $eth, $usdce, $bip],
+                [$bip, $musd, $eth, $bip],
+                [$bip, $eth, $musd, $bip],
+                [$bip, $hub, $eth, $bip],
+                [$bip, $eth, $hub, $bip],
+                [$bip, $btc, $eth, $bip],
+                [$bip, $eth, $btc, $bip],
+            ],
             'CUSTOM-MONEHUB' => [
                 [$moneHub, $bip, $hub, $moneHub],
                 [$moneHub, $hub, $bip, $moneHub],
@@ -88,10 +114,10 @@ class PoolsStore
             'CUSTOM-HUBABUBA' => [
                 [$hubabuba, $bip, $hub, $hubabuba],
                 [$hubabuba, $hub, $bip, $hubabuba],
-                [$hubabuba, $hub, $usdte, $bip, $hubabuba],
-                [$hubabuba, $hub, $usdce, $bip, $hubabuba],
                 [$hubabuba, $cap, $hub, $hubabuba],
                 [$hubabuba, $hub, $cap, $hubabuba],
+                [$hubabuba, $hub, $usdte, $bip, $hubabuba],
+                [$hubabuba, $hub, $usdce, $bip, $hubabuba],
                 [$hubabuba, $lambo, $hub, $hubabuba],
                 [$hubabuba, $hub, $lambo, $hubabuba],
             ],
@@ -212,6 +238,22 @@ class PoolsStore
                 [$microb, $hubabuba, $hub, $usdx, $microb],
                 [$microb, $hub, $hubabuba, $bip, $microb],
                 [$microb, $bip, $hubabuba, $hub, $microb],
+            ],
+            'GOLD' => [
+                [$bip, $hub, $gold, $bip],
+                [$bip, $gold, $hub, $bip],
+                [$bip, $gold, $liquidHub, $hub, $bip],
+                [$bip, $musd, $gold, $bip],
+                [$bip, $gold, $musd, $bip],
+                [$bip, $usdte, $gold, $bip],
+                [$bip, $gold, $usdte, $bip],
+                [$bip, $liquidHub, $gold, $bip],
+                [$bip, $gold, $liquidHub, $bip],
+                [$bip, $hub, $liquidHub, $gold, $bip],
+                [$bip, $musd, $usdte, $gold, $bip],
+                [$bip, $usdte, $musd, $gold, $bip],
+                [$bip, $hub, $usdte, $gold, $bip],
+                [$bip, $gold, $musd, $rubx, $bip],
             ],
             'MUSD' => [
                 [$bip, $musd, $usdte, $hub, $bip],
