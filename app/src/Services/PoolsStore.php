@@ -74,6 +74,7 @@ class PoolsStore
         $usdte = new CoinDto(1993, 'USDTE');
         $usdce = new CoinDto(1994, 'USDCE');
         $musd = new CoinDto(2024, 'MUSD');
+        $gold = new CoinDto(2058, 'GOLD');
 
         return [
             'CUSTOM-MONEHUB' => [
@@ -224,6 +225,7 @@ class PoolsStore
                 [$bip, $usdce, $musd, $bip],
                 [$bip, $musd, $rubx, $bip],
                 [$bip, $rubx, $musd, $bip],
+                [$bip, $usdce, $musd, $hub, $bip],
             ],
             'USDTE' => [
                 [$bip, $usdte, $usdx, $hub, $bip],
@@ -233,6 +235,9 @@ class PoolsStore
                 [$bip, $usdce, $usdte, $hub, $bip],
                 [$bip, $hub, $usdte, $bip],
                 [$bip, $hub, $usdte, $usdce, $bip],
+                [$bip, $usdte, $hub, $bip],
+                [$bip, $usdte, $gold, $bip],
+                [$bip, $usdte, $gold, $hub, $bip],
             ],
             'FERRARI' => [
                 [$bip, $ferrari, $monsterHub, $bip],
@@ -332,6 +337,10 @@ class PoolsStore
                 [$bip, $lambo, $hub, $bip],
                 [$bip, $hub, $usdte, $bip],
                 [$bip, $usdte, $hub, $bip],
+                [$bip, $usdte, $gold, $hub, $bip],
+                [$bip, $usdce, $musd, $hub, $bip],
+                [$bip, $hub, $gold, $bip],
+                [$bip, $hub, $gold, $usdte, $bip],
             ],
             'MONSTERHUB' => [
                 [$bip, $monsterHub, $hub, $bip],
