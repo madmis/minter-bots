@@ -161,6 +161,9 @@
     "monolog/monolog": {
         "version": "2.2.0"
     },
+    "pda/pheanstalk": {
+        "version": "v4.0.3"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -190,6 +193,12 @@
     },
     "simplito/elliptic-php": {
         "version": "1.0.3"
+    },
+    "symfony/amqp-messenger": {
+        "version": "v5.2.7"
+    },
+    "symfony/beanstalkd-messenger": {
+        "version": "v5.2.7"
     },
     "symfony/cache": {
         "version": "v4.3.2"
@@ -224,6 +233,9 @@
     },
     "symfony/doctrine-bridge": {
         "version": "v4.3.2"
+    },
+    "symfony/doctrine-messenger": {
+        "version": "v5.2.7"
     },
     "symfony/dotenv": {
         "version": "v4.3.2"
@@ -283,6 +295,18 @@
     "symfony/http-kernel": {
         "version": "v4.3.2"
     },
+    "symfony/messenger": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "e9a414b113ceadbf4e52abe37bf8f1b443f06ccb"
+        },
+        "files": [
+            "config/packages/messenger.yaml"
+        ]
+    },
     "symfony/mime": {
         "version": "v4.3.2"
     },
@@ -326,6 +350,9 @@
         "version": "v1.22.1"
     },
     "symfony/process": {
+        "version": "v5.2.7"
+    },
+    "symfony/redis-messenger": {
         "version": "v5.2.7"
     },
     "symfony/routing": {

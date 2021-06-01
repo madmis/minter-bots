@@ -1,0 +1,11 @@
+parameters:
+    env(MESSENGER_BEANSTALKD_TRANSPORT_DSN): 'beanstalkd://localhost:11300'
+
+framework:
+    messenger:
+        transports:
+            tx_notify: '%env(MESSENGER_BEANSTALKD_TRANSPORT_DSN)%'
+
+        routing:
+             'App\Dto\Messenger\OneCoinMessage': ['tx_notify']
+             'App\Dto\Messenger\PredefinedRoutesMessage': ['tx_notify']

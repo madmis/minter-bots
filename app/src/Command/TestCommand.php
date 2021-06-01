@@ -20,13 +20,16 @@ use Minter\SDK\MinterCoins\MinterBuyCoinTx;
 use Minter\SDK\MinterCoins\MinterCreateCoinTx;
 use Minter\SDK\MinterCoins\MinterSellAllCoinTx;
 use Minter\SDK\MinterCoins\MinterSellCoinTx;
+use Minter\SDK\MinterCoins\MinterSellSwapPoolTx;
 use Minter\SDK\MinterConverter;
 use Minter\SDK\MinterTx;
 use Minter\SDK\MinterWallet;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use function Amp\coroutine;
 use function Amp\Promise\all;
 use function Amp\Websocket\Client\connect;
@@ -64,6 +67,15 @@ class TestCommand extends Command
     protected function configure()
     {
         $this
+            ->addOption('req-delay', 'd', InputOption::VALUE_REQUIRED, 'Delay between requests in microseconds', 0)
+            ->addOption('tx-amounts', 'a', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Transaction amounts', [3000, 2000, 1000])
+            ->addOption(
+                'wallets-file',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Path to JSON wallets file',
+                '/var/www/ccbip/resources/wallets/Mx3d6927d293a446451f050b330aee443029be1564.json'
+            )
             ->setDescription('Test command.');
     }
 
@@ -75,164 +87,256 @@ class TestCommand extends Command
      *
      * @return void
      */
-    private function loopRun(array $pools, array $wallets) : void
-    {
-        $client = new Client(['base_uri' => 'https://api.minter.one']);
-
-        try {
-            Loop::run(function () use ($pools, $wallets, $client) {
-                /** @var Connection $connection */
-                $connection = yield connect('wss://explorer-rtm.minter.network/connection/websocket');
-                yield $connection->send('{"id":1}');
-
-                $i = 0;
-
-
-                /** @var Message $message */
-                while ($message = yield $connection->receive()) {
-                    $payload = yield $message->buffer();
-
-//                    printf("Received: %s\n", $payload);
-
-                    try {
-                        $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
-
-                        if (isset($data['id']) && $data['id'] === 1) {
-                            yield $connection->send('{"method":1,"params":{"channel":"transactions_100"},"id":3}');
-                        }
-
-                        if (isset($data['result']['channel']) && $data['result']['channel'] === 'transactions_100') {
-//                        dump($data);
-                            $channelData = $data['result']['data']['data'];
-                            // Types
-                            // 4 MinterBuyCoinTx, 2 MinterSellCoinTx, 3 MinterSellAllCoinTx,
-                            // 24 MinterBuySwapPoolTx, 23 MinterSellSwapPoolTx, 25 MinterSellAllSwapPoolTx
-                            // Нам нужны только транзакции в пулах
-                            if (in_array((int) $channelData['type'], [24, 25, 23], true)) {
-                                $coinsData = $channelData['data'];
-                                $sellS = $coinsData['coin_to_sell']['symbol'];
-                                $buyS = $coinsData['coin_to_buy']['symbol'];
-
-//                                $resp = $client->get('/v2/status');
-//                                $status = json_decode($resp->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-                                printf("Type: %s\n", $channelData['type']);
-                                printf("\tBuy: %s\n", $coinsData['coin_to_buy']['symbol']);
-                                printf("\tSell: %s\n", $coinsData['coin_to_sell']['symbol']);
-//                                printf("\t\tSTATUS: block: %s, block time: %s\n", $status['latest_block_height'], $status['latest_block_time']);
-                                printf("\t\tTX time - Local time: %s - %s\n", $channelData['timestamp'], (new DateTimeImmutable())->format('H:i:s'));
-                                printf("\t\tTX hash: %s\n", $channelData['hash']);
-                                printf("\t\tTX height: %s\n", $channelData['height']);
-                                printf("\t\tTX from: %s\n", $channelData['from']);
-
-                                if ($sellS === 'BIP' && $buyS === 'BIP') {
-                                    printf(
-                                        "\tRoute: %s\n",
-                                        implode('=>', array_map(static fn(array $item) => $item['symbol'], $coinsData['coins']))
-                                    );
-                                }
-//                                printf("Received: %s\n", $payload);
-
-                                $processes = [];
-                                $command = [
-                                    '/var/www/ccbip/bin/console',
-                                    'app:named-pools:arbitrate',
-                                    "--read-node='https://api.minter.one/v2/'",
-                                    "--write-node='https://api.minter.one/v2/'",
-                                    '--req-delay=0',
-                                    '-a 5000 -a 4000 -a 3000 -a 2000',
-                                    '-i 4',
-                                    '-vvv'
-                                ];
-
-                                $runProcess = coroutine(function(Process $process, string $name): iterable {
-                                    $process->start();
-                                    $exitCode = yield $process->join();
-                                    $stdout = trim(yield $process->getStdout()->read());
-                                    return compact('name', 'exitCode', 'stdout');
-                                });
-
-
-                                if (isset($pools[$sellS])) {
-                                    $command[] = "-p $sellS";
-                                    $processes['first'] = new Process(implode(' ', $command));
+//    private function loopRun(array $pools, array $wallets) : void
+//    {
+//        $client = new Client(['base_uri' => 'https://api.minter.one']);
 //
-//                                $j = 0;
-//                                do {
-//                                    (new PoolsArbitrator($this->logger))->arbitrate(
-//                                        $pools[$sellS],
-//                                        3748,
-//                                        new MinterAPI('https://api.minter.one/v2/'),
-//                                        new MinterAPI('https://api.minter.one/v2/'),
-//                                        0,
-//                                        0,
-//                                        $wallets
+//        try {
+//            Loop::run(function () use ($pools, $wallets, $client) {
+//                /** @var Connection $connection */
+//                $connection = yield connect('wss://explorer-rtm.minter.network/connection/websocket');
+//                yield $connection->send('{"id":1}');
+//
+//                $i = 0;
+//
+//
+//                /** @var Message $message */
+//                while ($message = yield $connection->receive()) {
+//                    $payload = yield $message->buffer();
+//
+////                    printf("Received: %s\n", $payload);
+//
+//                    try {
+//                        $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+//
+//                        if (isset($data['id']) && $data['id'] === 1) {
+//                            yield $connection->send('{"method":1,"params":{"channel":"transactions_100"},"id":3}');
+//                        }
+//
+//                        if (isset($data['result']['channel']) && $data['result']['channel'] === 'transactions_100') {
+////                        dump($data);
+//                            $channelData = $data['result']['data']['data'];
+//                            // Types
+//                            // 4 MinterBuyCoinTx, 2 MinterSellCoinTx, 3 MinterSellAllCoinTx,
+//                            // 24 MinterBuySwapPoolTx, 23 MinterSellSwapPoolTx, 25 MinterSellAllSwapPoolTx
+//                            // Нам нужны только транзакции в пулах
+//                            if (in_array((int) $channelData['type'], [24, 25, 23], true)) {
+//                                $coinsData = $channelData['data'];
+//                                $sellS = $coinsData['coin_to_sell']['symbol'];
+//                                $buyS = $coinsData['coin_to_buy']['symbol'];
+//
+////                                $resp = $client->get('/v2/status');
+////                                $status = json_decode($resp->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+//
+//                                printf("Type: %s\n", $channelData['type']);
+//                                printf("\tBuy: %s\n", $coinsData['coin_to_buy']['symbol']);
+//                                printf("\tSell: %s\n", $coinsData['coin_to_sell']['symbol']);
+////                                printf("\t\tSTATUS: block: %s, block time: %s\n", $status['latest_block_height'], $status['latest_block_time']);
+//                                printf("\t\tTX time - Local time: %s - %s\n", $channelData['timestamp'], (new DateTimeImmutable())->format('H:i:s'));
+//                                printf("\t\tTX hash: %s\n", $channelData['hash']);
+//                                printf("\t\tTX height: %s\n", $channelData['height']);
+//                                printf("\t\tTX from: %s\n", $channelData['from']);
+//
+//                                if ($sellS === 'BIP' && $buyS === 'BIP') {
+//                                    printf(
+//                                        "\tRoute: %s\n",
+//                                        implode('=>', array_map(static fn(array $item) => $item['symbol'], $coinsData['coins']))
 //                                    );
-//                                    $j++;
-//                                    sleep($j);
-//                                } while ($j < 3);
-                                }
-
-                                if (isset($pools[$buyS])) {
-                                    $command[] = "-p $sellS";
-                                    $processes['second'] = new Process(implode(' ', $command));
+//                                }
+////                                printf("Received: %s\n", $payload);
 //
-//                                $k = 0;
-//                                do {
-//                                    (new PoolsArbitrator($this->logger))->arbitrate(
-//                                        $pools[$buyS],
-//                                        3587,
-//                                        new MinterAPI('https://api.minter.one/v2/'),
-//                                        new MinterAPI('https://api.minter.one/v2/'),
-//                                        0,
-//                                        1,
-//                                        $wallets
-//                                    );
-//                                    $k++;
-//                                    sleep($k);
-//                                } while ($k < 3);
-                                }
-
-                                if ($processes) {
-                                    $outputs = yield all(array_map($runProcess, $processes, array_keys($processes)));
-//                                    var_dump($outputs);
-                                    $processes = [];
-                                }
-                            }
-                        }
-
-
-                    } catch (JsonException $e) {
-                    }
-
-//                if ($payload === 'Goodbye!') {
-//                    $connection->close();
-//                    break;
+//                                $processes = [];
+//                                $command = [
+//                                    '/var/www/ccbip/bin/console',
+//                                    'app:named-pools:arbitrate',
+//                                    "--read-node='https://api.minter.one/v2/'",
+//                                    "--write-node='https://api.minter.one/v2/'",
+//                                    '--req-delay=0',
+//                                    '-a 5000 -a 4000 -a 3000 -a 2000',
+//                                    '-i 4',
+//                                    '-vvv'
+//                                ];
+//
+//                                $runProcess = coroutine(function(Process $process, string $name): iterable {
+//                                    $process->start();
+//                                    $exitCode = yield $process->join();
+//                                    $stdout = trim(yield $process->getStdout()->read());
+//                                    return compact('name', 'exitCode', 'stdout');
+//                                });
+//
+//
+//                                if (isset($pools[$sellS])) {
+//                                    $command[] = "-p $sellS";
+//                                    $processes['first'] = new Process(implode(' ', $command));
+////
+////                                $j = 0;
+////                                do {
+////                                    (new PoolsArbitrator($this->logger))->arbitrate(
+////                                        $pools[$sellS],
+////                                        3748,
+////                                        new MinterAPI('https://api.minter.one/v2/'),
+////                                        new MinterAPI('https://api.minter.one/v2/'),
+////                                        0,
+////                                        0,
+////                                        $wallets
+////                                    );
+////                                    $j++;
+////                                    sleep($j);
+////                                } while ($j < 3);
+//                                }
+//
+//                                if (isset($pools[$buyS])) {
+//                                    $command[] = "-p $sellS";
+//                                    $processes['second'] = new Process(implode(' ', $command));
+////
+////                                $k = 0;
+////                                do {
+////                                    (new PoolsArbitrator($this->logger))->arbitrate(
+////                                        $pools[$buyS],
+////                                        3587,
+////                                        new MinterAPI('https://api.minter.one/v2/'),
+////                                        new MinterAPI('https://api.minter.one/v2/'),
+////                                        0,
+////                                        1,
+////                                        $wallets
+////                                    );
+////                                    $k++;
+////                                    sleep($k);
+////                                } while ($k < 3);
+//                                }
+//
+//                                if ($processes) {
+//                                    $outputs = yield all(array_map($runProcess, $processes, array_keys($processes)));
+////                                    var_dump($outputs);
+//                                    $processes = [];
+//                                }
+//                            }
+//                        }
+//
+//
+//                    } catch (JsonException $e) {
+//                    }
+//
+////                if ($payload === 'Goodbye!') {
+////                    $connection->close();
+////                    break;
+////                }
+////
+////                yield new Delayed(1000);
+////
+////                if ($i < 3) {
+////                    yield $connection->send('Ping: ' . ++$i);
+////                } else {
+////                    yield $connection->send('Goodbye!');
+////                }
 //                }
-//
-//                yield new Delayed(1000);
-//
-//                if ($i < 3) {
-//                    yield $connection->send('Ping: ' . ++$i);
-//                } else {
-//                    yield $connection->send('Goodbye!');
-//                }
-                }
-            });
-        } catch (ClosedException) {
-            $this->loopRun($pools, $wallets);
-        } catch (DnsException) {
-            $this->loopRun($pools, $wallets);
-        }
-    }
+//            });
+//        } catch (ClosedException) {
+//            $this->loopRun($pools, $wallets);
+//        } catch (DnsException) {
+//            $this->loopRun($pools, $wallets);
+//        }
+//    }
 
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
 //        $wallet = MinterWallet::createFromMnemonic('');
 //        dump($wallet->getPrivateKey());
+        $amounts = '';
+        foreach ($input->getOption('tx-amounts') as $amount) {
+            $amounts .= " -a {$amount}";
+        }
+        Loop::run(function () use ($amounts, $input) {
+            while (true) {
+                sleep(1);
+                $indexedCoins = (new PoolsStore())->coinsIndexedById();
+                try {
+                    $txs = (new MinterAPI('https://api.minter.one/v2/'))->getUnconfirmedTxs();
+                } catch (RequestException $e) {
+                    sleep(1);
+                    continue;
+                }
+
+//            printf("Found Txs: %s\n", count($txs->transactions));
+//            printf("\tBase64: %s\n", base64_encode(json_encode($txs->transactions)));
+                $processes = [];
+                $runProcess = coroutine(function (Process $process, string $name) : iterable {
+                    $process->start();
+                    $exitCode = yield $process->join();
+                    $stdout = trim(yield $process->getStdout()->read());
+
+                    return compact('name', 'exitCode', 'stdout');
+                });
+
+                foreach ($txs->transactions as $tx) {
+                    $tx1 = explode('{', $tx);
+                    $tx2 = explode('}', $tx1[1]);
+                    try {
+                        $mtx = MinterTx::decode($tx2[0]);
+                    } catch (Throwable $e) {
+                        continue;
+                    }
+
+                    /** @var MinterSellSwapPoolTx $dt */
+                    $dt = $mtx->getData();
+
+                    if (in_array((int) $dt->getType(), [24, 25, 23], true)) {
+                        $f = $dt->coins[array_key_first($dt->coins)];
+                        $l = $dt->coins[array_key_last($dt->coins)];
+
+                        if ($f !== $l) {
+                            printf("Type: %s (%s)\n", $dt->getType(), (new DateTimeImmutable())->format('H:i:s'));
+                            printf("\tSender: %s\n", $mtx->getSenderAddress());
+                            printf("\tNonce: %s\n", $mtx->getNonce());
+
+                            $coins = [];
+                            foreach ($dt->coins as $coinId) {
+                                if (isset($indexedCoins[$coinId]) && $coinId > 0) {
+                                    $coins[] = $indexedCoins[$coinId]->getSymbol();
+                                    $command = [
+                                        '/var/www/ccbip/bin/console',
+                                        'app:named-pools:arbitrate',
+                                        "--read-node='https://api.minter.one/v2/'",
+                                        "--write-node='https://api.minter.one/v2/'",
+                                        "--req-delay={$input->getOption('req-delay')}",
+                                        $amounts,
+                                        '-i 4',
+                                        "--wallets-file={$input->getOption('wallets-file')}",
+                                        '-vvv',
+                                    ];
+                                    $command[] = "-p {$indexedCoins[$coinId]->getSymbol()}";
+                                    $cmd = implode(' ', $command);
+                                    printf("\tCMD: %s\n", $cmd);
+                                    $processes[] = new Process($cmd);
+                                    // Можно попробовать пустить через очередь - beanstalkd
+
+                                }
+                            }
+                            printf("\tRoute: %s\n", implode('=>', $coins));
+
+//                            if ($coins) {
+//                                $cmd = implode(' ', $command);
+//                                printf("\tCMD: %s\n", $cmd);
+//                                $processes[] = new Process($cmd);
+//                            }
+                        }
+                    }
+                }
+
+                if ($processes) {
+                    $outputs = yield all(array_map($runProcess, $processes, array_keys($processes)));
+                    printf("Finished\n\n");
+//                    var_dump($outputs);
+                    $processes = [];
+                }
+            }
+        });
+
+
+        return 0;
 
         $bip = new CoinDto(0, 'BIP');
         $hub = new CoinDto(1902, 'HUB');

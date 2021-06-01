@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 use Minter\MinterAPI;
+use Minter\SDK\MinterCoins\MinterBuySwapPoolTx;
 use Minter\SDK\MinterCoins\MinterSellSwapPoolTx;
 use Minter\SDK\MinterTx;
 use Psr\Log\LoggerInterface;
@@ -53,7 +54,7 @@ class PoolsArbitrator
         string $walletAddress,
         string $walletPk,
         bool $isCustomRoute = false,
-        float $oneBipInCustomCoinPrice = 0.0
+        float $oneBipInCustomCoinPrice = 0.0,
     ) : string {
         $fee = count($route) > 4 ? 2 + ((count($route) - 4) * 0.25) : 2;
 
@@ -99,7 +100,7 @@ class PoolsArbitrator
         int $walletIdx,
         array $wallets,
         bool $isCustomRoute = false,
-        float $oneBipInCustomCoinPrice = 0.0
+        float $oneBipInCustomCoinPrice = 0.0,
     ) : void {
         $walletAddress = $wallets[$walletIdx]['wallet'];
         $walletPk = $wallets[$walletIdx]['pk'];
@@ -114,7 +115,15 @@ class PoolsArbitrator
                     $this->logger->debug("R: {$r}");
 //                    $this->logger->info("W: {$walletAddress}");
 
-                    $signedTx = $this->signTx($route, $txAmount, $readApi, $walletAddress, $walletPk, $isCustomRoute, $oneBipInCustomCoinPrice);
+                    $signedTx = $this->signTx(
+                        $route,
+                        $txAmount,
+                        $readApi,
+                        $walletAddress,
+                        $walletPk,
+                        $isCustomRoute,
+                        $oneBipInCustomCoinPrice
+                    );
                     $response = $writeApi->send($signedTx);
                     $this->logger->info("R: {$r}");
                     $this->logger->info("\t", ['response' => (array) $response]);

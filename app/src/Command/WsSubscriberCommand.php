@@ -91,7 +91,8 @@ class WsSubscriberCommand extends Command
                         $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
 
                         if (isset($data['id']) && $data['id'] === 1) {
-                            yield $connection->send('{"method":1,"params":{"channel":"transactions_100"},"id":3}');
+                            yield $connection->send('{"method":1,"params":{"channel":"blocks"},"id":2}{"method":1,"params":{"channel":"transactions_100"},"id":3}');
+//                            yield $connection->send('{"method":1,"params":{"channel":"transactions_100"},"id":3}');
                         }
 
                         if (isset($data['result']['channel']) && $data['result']['channel'] === 'transactions_100') {
@@ -165,6 +166,11 @@ class WsSubscriberCommand extends Command
                                     $processes = [];
                                 }
                             }
+                        } elseif (isset($data['result']['channel']) && $data['result']['channel'] === 'blocks'){
+                            $channelData = $data['result']['data']['data'];
+                            printf("Block: %s\n", $channelData['height']);
+                            printf("\tTime - Local time: %s - %s\n", $channelData['timestamp'], (new DateTimeImmutable())->format('H:i:s'));
+                            printf("\tTx count: %s\n", $channelData['transaction_count']);
                         }
                     } catch (JsonException $e) {
                     }

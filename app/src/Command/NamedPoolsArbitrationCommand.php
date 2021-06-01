@@ -72,6 +72,7 @@ class NamedPoolsArbitrationCommand extends Command
             ->addOption('iterations', 'i', InputOption::VALUE_REQUIRED, 'Iterations count to repeat requests in the pools', 3)
             ->addOption('pools', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Pools (Coin symbol)', [])
             ->addOption('custom-coin-pool', null, InputOption::VALUE_NONE, "Set if it's custom coin pool")
+            ->addOption('short-pool', null, InputOption::VALUE_NONE, "Use short pools")
             ->addOption(
                 'one-bip-in-custom-coin-price',
                 null,
@@ -104,10 +105,11 @@ class NamedPoolsArbitrationCommand extends Command
         $pools = $input->getOption('pools');
         $isCustomRoute = (bool) $input->getOption('custom-coin-pool');
         $oneBipInCustomCoinPrice = (float) $input->getOption('one-bip-in-custom-coin-price');
+        $useShortPool = (bool) $input->getOption('short-pool');
 
         $arbitrator = new PoolsArbitrator($this->logger);
 
-        $poolsDef = $this->getPools();
+        $poolsDef = $this->getPools($useShortPool);
         $routes = [];
 
         foreach ($pools as $pool) {
@@ -141,10 +143,14 @@ class NamedPoolsArbitrationCommand extends Command
     /**
      * getPools.
      *
+     * @param bool $useShortPools
+     *
      * @return CoinDto[][][]
      */
-    private function getPools() : array
+    private function getPools(bool $useShortPools) : array
     {
-        return (new PoolsStore())->getPools();
+        return $useShortPools
+            ? (new PoolsStore())->getShortPools()
+            : (new PoolsStore())->getPools();
     }
 }

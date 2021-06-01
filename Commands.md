@@ -1,8 +1,11 @@
 ### Websocket listener
 
 ```
-./bin/console app:ws:subscribe -a 1000 -a 2000 --req-delay=100000
+./bin/console app:ws:subscribe -a 1000 -a 2000 --req-delay=100000 \
     --wallets-file=/var/www/ccbip/resources/wallets/Mx3d6927d293a446451f050b330aee443029be1564.json
+
+./bin/console app:ws:block:subscribe --req-delay=0 -a 3250 -a 3251 -a 3252 \
+    --wallets-file=/var/www/ccbip/resources/wallets/Mx3d6927d293a446451f050b330aee443029be1564.json    
 ```
 
 Run its in loop
@@ -31,7 +34,7 @@ OR
 ```
 
 
-
+Еще можно мониторить постоянно всего пару роутов. Тогда есть вероятность поймать место в блоке.
 
 
 #################################################
@@ -41,13 +44,20 @@ OR
 
 ```
 ./bin/ws-loop.sh |& tee -a ./var/log/websocket.txt &
+./bin/ws-block-loop.sh |& tee -a ./var/log/websocket-block.txt &
 
 ``` 
 
 ### BIP
 ```
+### Short pool
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 7000 -a 6900 -a 6800 --req-delay=0 -i 10000000 -p GOLD -p HUB -p BTC -p ETH \
+    -a 7000 -a 6900 -a 6800 --req-delay=0 -i 10000000 -p HUB -p BTC \
+    --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json
+####
+
+./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
+    -a 7000 -a 6900 -a 6800 --req-delay=0 -i 10000000 -p GOLD -p HUB \
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
@@ -63,17 +73,17 @@ OR
 ### CUSTOM
 ```
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 0.27 --req-delay=0 -i 10000000 -p CUSTOM-HUB \
+    -a 1.14 --req-delay=0 -i 10000000 -p CUSTOM-HUB \
     --wallets-file=/var/www/ccbip/resources/wallets/a23b3e.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.00008 |& tee -a ./var/log/custom-hub.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 357 --req-delay=0 -i 10000000 -p CUSTOM-MICROB \
+    -a 362 --req-delay=0 -i 10000000 -p CUSTOM-MICROB \
     --wallets-file=/var/www/ccbip/resources/wallets/9174b0.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.5 |& tee -a ./var/log/custom-microb.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 2.11 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
+    -a 2.20 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
     --wallets-file=/var/www/ccbip/resources/wallets/eee5c7.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.004 |& tee -a ./var/log/custom-bigmac.txt &
     
@@ -83,12 +93,12 @@ OR
     --custom-coin-pool --one-bip-in-custom-coin-price=0.02 |& tee -a ./var/log/custom-usdte.txt &
         
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 0.002 --req-delay=0 -i 10000000 -p CUSTOM-HUBABUBA \
+    -a 0.0021 --req-delay=0 -i 10000000 -p CUSTOM-HUBABUBA \
     --wallets-file=/var/www/ccbip/resources/wallets/c9896e.json \
-    --custom-coin-pool --one-bip-in-custom-coin-price=0.000003 |& tee -a ./var/log/custom-hubabuba.txt &
+    --custom-coin-pool --one-bip-in-custom-coin-price=0.0000027 |& tee -a ./var/log/custom-hubabuba.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 0.1 --req-delay=0 -i 10000000 -p CUSTOM-MONEHUB \
+    -a 0.12 --req-delay=0 -i 10000000 -p CUSTOM-MONEHUB \
     --wallets-file=/var/www/ccbip/resources/wallets/375f21.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.0001 |& tee -a ./var/log/custom-monehub.txt &
     
