@@ -46,6 +46,15 @@ class PoolsStore
             2058 => new CoinDto(2058, 'GOLD'),
             2064 => new CoinDto(2064, 'BTC'),
             2065 => new CoinDto(2065, 'ETH'),
+            24 => new CoinDto(24, 'PINT'),
+            2123 => new CoinDto(2123, 'NOVOCOIN'),
+            1977 => new CoinDto(1977, 'NOVACOIN'),
+            2048 => new CoinDto(2048, 'WOLF'),
+            2054 => new CoinDto(2054, 'NAVALNY'),
+            2125 => new CoinDto(2125, 'NEVRMINTER'),
+            10 => new CoinDto(10, 'LASHIN'),
+            1692 => new CoinDto(1692, 'MARS2043'),
+            1992 => new CoinDto(1992, 'ELONMUSK'),
         ];
     }
 
@@ -83,6 +92,15 @@ class PoolsStore
         $gold = new CoinDto(2058, 'GOLD');
         $btc = new CoinDto(2064, 'BTC');
         $eth = new CoinDto(2065, 'ETH');
+        $pint = new CoinDto(24, 'PINT');
+        $novocoin = new CoinDto(2123, 'NOVOCOIN');
+        $novacoin = new CoinDto(1977, 'NOVACOIN');
+        $wolf = new CoinDto(2048, 'WOLF');
+        $navalny = new CoinDto(2054, 'NAVALNY');
+        $neverminter = new CoinDto(2125, 'NEVRMINTER');
+        $lashin = new CoinDto(10, 'LASHIN');
+        $mars2043 = new CoinDto(1692, 'MARS2043');
+        $elonMusk = new CoinDto(1992, 'ELONMUSK');
 
         return [
             'BTC' => [

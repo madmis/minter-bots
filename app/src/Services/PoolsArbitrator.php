@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ServerException;
 use Minter\MinterAPI;
 use Minter\SDK\MinterCoins\MinterBuySwapPoolTx;
 use Minter\SDK\MinterCoins\MinterSellSwapPoolTx;
+use Minter\SDK\MinterConverter;
 use Minter\SDK\MinterTx;
 use Psr\Log\LoggerInterface;
 
@@ -63,7 +64,7 @@ class PoolsArbitrator
         }
 
         $minGetAmount = $txAmount + $fee;
-        $this->logger->debug("\tAmount: {$txAmount}. Min get amount: {$minGetAmount}");
+//        $this->logger->debug("\tAmount: {$txAmount}. Min get amount: {$minGetAmount}");
 
         $data = new MinterSellSwapPoolTx(
             array_map(static fn(CoinDto $coin) => $coin->getId(), $route),
@@ -145,10 +146,17 @@ class PoolsArbitrator
                     if (!empty($data['error']['code']) && (int) $data['error']['code'] === 302) {
                         $errorData = $data['error']['data'];
                         $this->logger->debug(sprintf(
-                            'Want: %.02f - Got: %.02f => Coin: %s',
-                            $errorData['maximum_value_to_sell'],
-                            $errorData['needed_spend_value'],
+                            'Want: %s - Got: %s => Coin: %s',
+                            MinterConverter::convertToBase($errorData['maximum_value_to_sell']),
+                            MinterConverter::convertToBase($errorData['needed_spend_value']),
                             $errorData['coin_symbol'],
+                        ));
+                    } elseif (!empty($data['error']['code']) && (int) $data['error']['code'] === 701) {
+                        $errorData = $data['error']['data'];
+                        $this->logger->debug(sprintf(
+                            'Swap pool not exists: %s - %s',
+                            $errorData['coin0'],
+                            $errorData['coin1'],
                         ));
                     } else {
                         $this->logger->error($e->getMessage(), [

@@ -2,11 +2,10 @@
 
 namespace App\Command;
 
-use Amp\Loop;
-use App\Dto\Messenger\OneCoinMessage;
 use App\Dto\Messenger\PredefinedRoutesMessage;
 use App\Services\PoolsStore;
 use DateTimeImmutable;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Minter\MinterAPI;
 use Minter\SDK\MinterCoins\MinterSellSwapPoolTx;
@@ -72,7 +71,7 @@ class MemPoolTxCollectorCommand extends Command
         while (true) {
             try {
                 $txs = (new MinterAPI('https://api.minter.one/v2/'))->getUnconfirmedTxs();
-            } catch (RequestException $e) {
+            } catch (RequestException|ConnectException) {
                 sleep(1);
                 continue;
             }
@@ -98,7 +97,7 @@ class MemPoolTxCollectorCommand extends Command
 
                         if ($first !== $last) {
                             printf("Type: %s (%s)\n", $txData->getType(), (new DateTimeImmutable())->format('H:i:s'));
-//                            printf("\tSender: %s\n", $mtx->getSenderAddress());
+                            printf("\tSender: %s\n", $mtx->getSenderAddress());
 //                            printf("\tNonce: %s\n", $mtx->getNonce());
 
                             $coins = [];
@@ -108,7 +107,7 @@ class MemPoolTxCollectorCommand extends Command
                                 }
                             }
 
-                            if (count($coins) > 1) {
+                            if ($coins) {
                                 $routes = [];
                                 // TODO: собирать роуты сразу из коинов на месте компонуя их с BIP на входе и выходе
                                 foreach ($coins as $coinId1 => $coin1) {
@@ -119,6 +118,8 @@ class MemPoolTxCollectorCommand extends Command
                                     }
                                 }
                                 $this->bus->dispatch(new PredefinedRoutesMessage($routes));
+                                $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(3000)]);
+                                $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(6000)]);
 
 //                                foreach ($coins as $coinId => $coin) {
 //                                    $this->bus->dispatch(new OneCoinMessage($coinId));
@@ -129,8 +130,12 @@ class MemPoolTxCollectorCommand extends Command
                     }
                 }
             }
-            printf("Finish\n");
-            sleep(3);
+            
+            if (count($txs->transactions) > 0) {
+                sleep(1);
+            } else {
+                usleep(200000);
+            }
         }
 
         return self::SUCCESS;

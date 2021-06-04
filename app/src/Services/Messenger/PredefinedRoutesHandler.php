@@ -43,14 +43,14 @@ class PredefinedRoutesHandler implements MessageHandlerInterface
     {
         $indexedCoins = (new PoolsStore())->coinsIndexedById();
         $arbitrator = new PoolsArbitrator($this->logger);
-        $txAmount = 7500;
+        $txAmount = 7000;
         $readApi = new MinterAPI('https://api.minter.one/v2/');
         $writeApi = new MinterAPI('https://api.minter.one/v2/');
-        $walletsFile = '/var/www/ccbip/resources/wallets/Mx3d6927d293a446451f050b330aee443029be1564.json';
+        $walletsFile = '/var/www/ccbip/resources/wallets/2-be1564-858cfa.json';
         /** @noinspection PhpUnhandledExceptionInspection */
         $wallets = array_values(json_decode(file_get_contents($walletsFile), true, 512, JSON_THROW_ON_ERROR));
         $walletIdx = array_rand($wallets);
-        $iterations = 5;
+        $iterations = 1;
 
         $routes = [];
 
@@ -63,6 +63,13 @@ class PredefinedRoutesHandler implements MessageHandlerInterface
             $routes[] = $rt;
         }
 
+        // Возможно чувак делает так
+        // Он смотрит транзакцию из мемпула и шлет в мемпул транзакцию по бипам
+        // с этим же роутом и суммой, которую сейчас можно получить не получив отлуп
+        // (есть метод проверки минимальной суммы которую можно получить).
+        // таким образом транзакция сразу же попадает в этот же блок и потом берет ликвидность из текущей транзы
+
+
         for ($i = 0; $i < $iterations; $i++) {
             $arbitrator->arbitrate(
                 $routes,
@@ -73,7 +80,7 @@ class PredefinedRoutesHandler implements MessageHandlerInterface
                 $walletIdx,
                 $wallets
             );
-            usleep(500000);
+            sleep(1);
         }
     }
 }
