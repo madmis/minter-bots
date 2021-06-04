@@ -53,7 +53,7 @@ OR
 ### Short pool
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
     -a 7000 -a 6900 -a 6800 --req-delay=0 -i 10000000 -p HUB -p BTC \
-    --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json
+    --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 ####
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
@@ -61,12 +61,12 @@ OR
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 5800 -a 5700 -a 5600 --req-delay=0 -i 10000000 \
+    -a 7110 -a 6910 -a 7010 --req-delay=0 -i 10000000 \
     -p LIQUIDHUB -p HUBABUBA -p BIGMAC -p COUPON -p QUOTA -p MICROB -p LAMBO -p RUBX -p USDTE  -p MONSTERHUB -p MICROB -p CAP -p HUBCHAIN -p MONEHUB -p USDX \
     --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 880 -a 870 -a 860 --req-delay=0 -i 10000000 -p MUSD -p FERRARI -p YANKEE -p FTMUSD -p FREEDOM  \
+    -a 840 -a 830 -a 820 --req-delay=0 -i 10000000 -p MUSD -p FERRARI -p YANKEE -p FTMUSD -p FREEDOM  \
     --wallets-file=/var/www/ccbip/resources/wallets/4-f94060-3c0965.json |& tee -a ./var/log/3.txt &
 ```
 
@@ -83,22 +83,22 @@ OR
     --custom-coin-pool --one-bip-in-custom-coin-price=0.5 |& tee -a ./var/log/custom-microb.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 2.20 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
+    -a 2.23 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
     --wallets-file=/var/www/ccbip/resources/wallets/eee5c7.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.004 |& tee -a ./var/log/custom-bigmac.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 2.40 --req-delay=0 -i 10000000 -p CUSTOM-USDTE -p CUSTOM-USDX \
+    -a 2.56 --req-delay=0 -i 10000000 -p CUSTOM-USDTE -p CUSTOM-USDX \
     --wallets-file=/var/www/ccbip/resources/wallets/a5f12d.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.02 |& tee -a ./var/log/custom-usdte.txt &
         
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 0.0021 --req-delay=0 -i 10000000 -p CUSTOM-HUBABUBA \
+    -a 0.0022 --req-delay=0 -i 10000000 -p CUSTOM-HUBABUBA \
     --wallets-file=/var/www/ccbip/resources/wallets/c9896e.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.0000027 |& tee -a ./var/log/custom-hubabuba.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 0.12 --req-delay=0 -i 10000000 -p CUSTOM-MONEHUB \
+    -a 0.13 --req-delay=0 -i 10000000 -p CUSTOM-MONEHUB \
     --wallets-file=/var/www/ccbip/resources/wallets/375f21.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.0001 |& tee -a ./var/log/custom-monehub.txt &
     
