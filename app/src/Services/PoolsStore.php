@@ -55,6 +55,7 @@ class PoolsStore
             10 => new CoinDto(10, 'LASHIN'),
             1692 => new CoinDto(1692, 'MARS2043'),
             1992 => new CoinDto(1992, 'ELONMUSK'),
+            1084 => new CoinDto(1084, 'ORACUL'),
         ];
     }
 
@@ -101,6 +102,7 @@ class PoolsStore
         $lashin = new CoinDto(10, 'LASHIN');
         $mars2043 = new CoinDto(1692, 'MARS2043');
         $elonMusk = new CoinDto(1992, 'ELONMUSK');
+        $oracul = new CoinDto(1084, 'ORACUL');
 
         return [
             'BTC' => [
@@ -136,6 +138,8 @@ class PoolsStore
                 [$moneHub, $bip, $liquidHub, $moneHub],
                 [$moneHub, $liquidHub, $hub, $moneHub],
                 [$moneHub, $hub, $liquidHub, $moneHub],
+                [$moneHub, $bip, $oracul, $moneHub],
+                [$moneHub, $oracul, $bip, $moneHub],
             ],
             'CUSTOM-HUBABUBA' => [
                 [$hubabuba, $bip, $hub, $hubabuba],
@@ -159,6 +163,8 @@ class PoolsStore
                 [$liquidHub, $hub, $moneHub, $liquidHub],
                 [$liquidHub, $monsterHub, $hub, $bip, $liquidHub],
                 [$liquidHub, $hub, $bip, $liquidHub],
+                [$liquidHub, $monsterHub, $oracul, $bip, $liquidHub],
+                [$liquidHub, $bip, $oracul, $monsterHub, $liquidHub],
                 //                [$liquidHub, $bip, $lambo, $hub, $liquidHub],
                 //                [$liquidHub, $bip, $usdte, $hub, $liquidHub],
                 //                [$liquidHub, $hub, $usdte, $bip, $liquidHub],
@@ -174,6 +180,8 @@ class PoolsStore
                 [$monsterHub, $hub, $liquidHub, $monsterHub],
                 [$monsterHub, $liquidHub, $bip, $monsterHub],
                 [$monsterHub, $bip, $liquidHub, $monsterHub],
+                [$monsterHub, $oracul, $bip, $monsterHub],
+                [$monsterHub, $bip, $oracul, $monsterHub],
 
                 //                [$monsterHub, $bip, $lambo, $hub, $monsterHub],
                 //                [$monsterHub, $hub, $usdte, $bip, $monsterHub],
@@ -186,6 +194,44 @@ class PoolsStore
                 //                [$monsterHub, $bip, $usdce, $hub, $monsterHub],
                 //                [$monsterHub, $hub, $hubabuba, $bip, $monsterHub],
                 //                [$monsterHub, $bip, $hubabuba, $hub, $monsterHub],
+            ],
+            'CUSTOM-MUSD' => [
+                [$musd, $bip, $usdx, $musd],
+                [$musd, $hub, $usdx, $musd],
+                [$musd, $hub, $hubabuba, $bip, $musd],
+                [$musd, $hub, $monsterHub, $bip, $musd],
+                [$musd, $hub, $lambo, $bip, $musd],
+                [$musd, $hub, $hubChain, $bip, $musd],
+                [$musd, $hub, $liquidHub, $bip, $musd],
+                [$musd, $hub, $moneHub, $bip, $musd],
+                [$musd, $hub, $cap, $bip, $musd],
+                [$musd, $usdte, $hub, $musd],
+                [$musd, $usdx, $bip, $musd],
+                [$musd, $usdce, $usdte, $musd],
+                [$musd, $usdte, $usdce, $musd],
+                [$musd, $usdx, $usdte, $musd],
+                [$musd, $usdte, $usdx, $musd],
+                [$musd, $usdte, $usdx, $musd],
+                [$musd, $usdx, $usdte, $musd],
+            ],
+            'CUSTOM-USDCE' => [
+                [$usdce, $bip, $usdx, $usdce],
+                [$usdce, $hub, $usdx, $usdce],
+                [$usdce, $hub, $hubabuba, $bip, $usdce],
+                [$usdce, $hub, $monsterHub, $bip, $usdce],
+                [$usdce, $hub, $lambo, $bip, $usdce],
+                [$usdce, $hub, $hubChain, $bip, $usdce],
+                [$usdce, $hub, $liquidHub, $bip, $usdce],
+                [$usdce, $hub, $moneHub, $bip, $usdce],
+                [$usdce, $hub, $cap, $bip, $usdce],
+                [$usdce, $usdte, $hub, $usdce],
+                [$usdce, $usdx, $bip, $usdce],
+                [$usdce, $musd, $usdte, $usdce],
+                [$usdce, $usdte, $musd, $usdce],
+                [$usdce, $usdx, $musd, $usdce],
+                [$usdce, $musd, $usdx, $usdce],
+                [$usdce, $usdte, $usdx, $usdce],
+                [$usdce, $usdx, $usdte, $usdce],
             ],
             'CUSTOM-USDTE' => [
                 [$usdte, $bip, $usdx, $usdte],
@@ -261,6 +307,8 @@ class PoolsStore
                 [$hub, $moneHub, $liquidHub, $bip, $hub],
                 [$hub, $microb, $bip, $hub],
                 [$hub, $bip, $microb, $hub],
+                [$hub, $monsterHub, $oracul, $bip, $hub],
+                [$hub, $bip, $oracul, $monsterHub, $hub],
                 //                [$hub, $lambo, $bip, $hub],
                 //                [$hub, $bip, $lambo, $hub],
                 //                [$hub, $rubx, $bip, $lambo, $hub],
@@ -502,6 +550,7 @@ class PoolsStore
         $gold = new CoinDto(2058, 'GOLD');
         $btc = new CoinDto(2064, 'BTC');
         $eth = new CoinDto(2065, 'ETH');
+        $oracul = new CoinDto(1084, 'ORACUL');
 
         return [
             'HUB' => [
@@ -512,6 +561,7 @@ class PoolsStore
                 [$bip, $hub, $usdte, $bip],
                 [$bip, $hub, $liquidHub, $bip],
                 [$bip, $hub, $cap, $bip],
+                [$bip, $oracul, $monsterHub, $bip],
             ],
         ];
     }

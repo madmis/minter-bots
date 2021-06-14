@@ -82,7 +82,7 @@ class WsBlockSubscriberCommand extends Command
                 'a',
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Transaction amounts',
-                [3000, 2000, 1000]
+                [7551, 7451, 7351]
             )
             ->addOption(
                 'wallets-file',
