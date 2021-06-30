@@ -82,17 +82,77 @@ class ArbitrateLhubMHubCommand extends Command
         $hub = new CoinDto(1902, 'HUB');
         $hubChain = new CoinDto(1900, 'HUBCHAIN');
         $moneHub = new CoinDto(1901, 'MONEHUB');
-
+        $oracul = new CoinDto(1084, 'ORACUL');
+        $bip = new CoinDto(0, 'BIP');
+        $usdx = new CoinDto(1678, 'USDX');
+        $usdte = new CoinDto(1993, 'USDTE');
+        $usdce = new CoinDto(1994, 'USDCE');
+        $musd = new CoinDto(2024, 'MUSD');
 
         $routes = [
+            1084 => [
+                [$oracul, $liquidHub],
+                [$oracul, $bip, $liquidHub],
+                [$oracul, $bip, $hub, $liquidHub],
+                [$oracul, $usdx, $bip, $liquidHub],
+                [$oracul, $bip, $usdx, $liquidHub],
+                [$oracul, $usdx, $usdte, $bip, $liquidHub],
+                [$oracul, $usdx, $usdce, $bip, $liquidHub],
+                [$oracul, $usdx, $musd, $bip, $liquidHub],
+
+                [$oracul, $monsterHub],
+                [$oracul, $bip, $monsterHub],
+                [$oracul, $bip, $hub, $monsterHub],
+                [$oracul, $usdx, $bip, $monsterHub],
+                [$oracul, $bip, $usdx, $monsterHub],
+                [$oracul, $usdx, $usdte, $bip, $monsterHub],
+                [$oracul, $usdx, $usdce, $bip, $monsterHub],
+                [$oracul, $usdx, $musd, $bip, $monsterHub],
+
+                [$oracul, $moneHub],
+                [$oracul, $bip, $moneHub],
+                [$oracul, $bip, $hub, $moneHub],
+                [$oracul, $usdx, $bip, $moneHub],
+                [$oracul, $bip, $usdx, $moneHub],
+                [$oracul, $usdx, $usdte, $bip, $moneHub],
+                [$oracul, $usdx, $usdce, $bip, $moneHub],
+                [$oracul, $usdx, $musd, $bip, $moneHub],
+            ],
+            1901 => [
+                [$moneHub, $liquidHub],
+                [$moneHub, $bip, $liquidHub],
+                [$moneHub, $hub, $liquidHub],
+                [$moneHub, $hub, $monsterHub],
+                [$moneHub, $oracul],
+                [$moneHub, $oracul, $liquidHub],
+                [$moneHub, $oracul, $monsterHub],
+                [$moneHub, $bip, $oracul],
+                [$moneHub, $bip, $monsterHub],
+                [$moneHub, $bip, $liquidHub],
+            ],
             1895 => [
                 [$monsterHub, $liquidHub],
+                [$monsterHub, $oracul],
+                [$monsterHub, $bip, $oracul],
+                [$monsterHub, $bip, $liquidHub],
+                [$monsterHub, $oracul, $liquidHub],
+                [$monsterHub, $liquidHub, $oracul, ],
+                [$monsterHub, $hub, $bip, $liquidHub],
                 [$monsterHub, $hub, $liquidHub],
                 [$monsterHub, $hub, $moneHub, $liquidHub],
                 [$monsterHub, $hub, $hubChain, $liquidHub],
+                [$monsterHub, $hub, $moneHub],
+                [$monsterHub, $bip, $moneHub],
+                [$monsterHub, $oracul, $moneHub],
             ],
             1893 => [
                 [$liquidHub, $monsterHub],
+                [$liquidHub, $bip, $monsterHub],
+                [$liquidHub, $bip, $moneHub],
+                [$liquidHub, $oracul],
+                [$liquidHub, $oracul, $monsterHub],
+                [$liquidHub, $oracul, $moneHub],
+                [$liquidHub, $bip, $oracul],
                 [$liquidHub, $hub, $monsterHub],
                 [$liquidHub, $moneHub, $hub, $monsterHub],
                 [$liquidHub, $hubChain, $hub, $monsterHub],

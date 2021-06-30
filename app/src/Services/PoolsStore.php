@@ -21,7 +21,6 @@ class PoolsStore
         return [
             0 => new CoinDto(0, 'BIP'),
             1902 => new CoinDto(1902, 'HUB'),
-            1784 => new CoinDto(1784, 'RUBX'),
             1895 => new CoinDto(1895, 'MONSTERHUB'),
             1893 => new CoinDto(1893, 'LIQUIDHUB'),
             1900 => new CoinDto(1900, 'HUBCHAIN'),
@@ -68,7 +67,6 @@ class PoolsStore
     {
         $bip = new CoinDto(0, 'BIP');
         $hub = new CoinDto(1902, 'HUB');
-        $rubx = new CoinDto(1784, 'RUBX');
         $monsterHub = new CoinDto(1895, 'MONSTERHUB');
         $liquidHub = new CoinDto(1893, 'LIQUIDHUB');
         $hubChain = new CoinDto(1900, 'HUBCHAIN');
@@ -152,8 +150,6 @@ class PoolsStore
                 [$hubabuba, $hub, $usdte, $hubabuba],
                 [$hubabuba, $cap, $bip, $hubabuba],
                 [$hubabuba, $bip, $cap, $hubabuba],
-                //                [$hubabuba, $rubx, $hub, $hubabuba],
-                //                [$hubabuba, $hub, $rubx, $hubabuba],
             ],
             'CUSTOM-LIQUIDHUB' => [
                 [$liquidHub, $bip, $hub, $liquidHub],
@@ -290,8 +286,6 @@ class PoolsStore
                 [$hub, $lp59, $bip, $hub],
                 [$hub, $hubChain, $bip, $hub],
                 [$hub, $bip, $hubChain, $hub],
-                [$hub, $bip, $rubx, $hub],
-                [$hub, $rubx, $bip, $hub],
                 [$hub, $liquidHub, $monsterHub, $hub],
                 [$hub, $monsterHub, $liquidHub, $hub],
                 [$hub, $liquidHub, $moneHub, $hub],
@@ -311,7 +305,6 @@ class PoolsStore
                 [$hub, $bip, $oracul, $monsterHub, $hub],
                 //                [$hub, $lambo, $bip, $hub],
                 //                [$hub, $bip, $lambo, $hub],
-                //                [$hub, $rubx, $bip, $lambo, $hub],
                 //                [$hub, $lambo, $bip, $liquidHub, $hub],
             ],
             'CUSTOM-MICROB' => [
@@ -337,7 +330,6 @@ class PoolsStore
                 [$bip, $musd, $usdte, $gold, $bip],
                 [$bip, $usdte, $musd, $gold, $bip],
                 [$bip, $hub, $usdte, $gold, $bip],
-                [$bip, $gold, $musd, $rubx, $bip],
             ],
             'MUSD' => [
                 [$bip, $musd, $usdte, $hub, $bip],
@@ -349,8 +341,6 @@ class PoolsStore
                 [$bip, $musd, $usdte, $bip],
                 [$bip, $musd, $usdce, $bip],
                 [$bip, $usdce, $musd, $bip],
-                [$bip, $musd, $rubx, $bip],
-                [$bip, $rubx, $musd, $bip],
                 [$bip, $usdce, $musd, $hub, $bip],
             ],
             'USDTE' => [
@@ -449,8 +439,6 @@ class PoolsStore
                 [$bip, $usdx, $coupon, $bigmac, $bip],
             ],
             'HUB' => [
-                [$bip, $hub, $rubx, $bip],
-                [$bip, $rubx, $hub, $bip],
                 [$bip, $monsterHub, $hub, $bip],
                 [$bip, $hub, $monsterHub, $bip],
                 [$bip, $hub, $liquidHub, $bip],
@@ -499,8 +487,6 @@ class PoolsStore
             'HUBABUBA' => [
                 [$bip, $hub, $hubabuba, $bip],
                 [$bip, $hubabuba, $hub, $bip],
-                [$bip, $rubx, $hubabuba, $bip],
-                [$bip, $hubabuba, $rubx, $bip],
                 [$bip, $hubabuba, $microb, $bip],
                 [$bip, $microb, $hubabuba, $bip],
                 [$bip, $hubabuba, $cap, $bip],
@@ -510,14 +496,6 @@ class PoolsStore
                 [$bip, $musd, $hub, $hubabuba, $bip],
                 [$bip, $usdx, $hub, $hubabuba, $bip],
             ],
-            'RUBX' => [
-                [$bip, $hub, $rubx, $bip],
-                [$bip, $rubx, $hub, $bip],
-                [$bip, $usdce, $hub, $rubx, $bip],
-                [$bip, $usdte, $hub, $rubx, $bip],
-                [$bip, $musd, $hub, $rubx, $bip],
-                [$bip, $usdx, $hub, $rubx, $bip],
-            ],
         ];
     }
 
@@ -525,7 +503,6 @@ class PoolsStore
     {
         $bip = new CoinDto(0, 'BIP');
         $hub = new CoinDto(1902, 'HUB');
-        $rubx = new CoinDto(1784, 'RUBX');
         $monsterHub = new CoinDto(1895, 'MONSTERHUB');
         $liquidHub = new CoinDto(1893, 'LIQUIDHUB');
         $hubChain = new CoinDto(1900, 'HUBCHAIN');

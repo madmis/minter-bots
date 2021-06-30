@@ -83,16 +83,19 @@ class ArbitrateUSDCommand extends Command
         $musd = new CoinDto(2024, 'MUSD');
         $hub = new CoinDto(1902, 'HUB');
         $hubabuba = new CoinDto(1942, 'HUBABUBA');
+        $usdx = new CoinDto(1678, 'USDX');
+        $bigmac = new CoinDto(907, 'BIGMAC');
+        $quota = new CoinDto(1086, 'QUOTA');
+        $coupon = new CoinDto(1043, 'COUPON');
+        $microb = new CoinDto(1087, 'MICROB');
+        $yankee = new CoinDto(1074, 'YANKEE');
+        $oracul = new CoinDto(1084, 'ORACUL');
 
-//        $coins = [
-//            1993 => $usdte,
-//            1994 => $usdce,
-//            2024 => $musd,
-//        ];
         $routes = [
             1993 => [
                 [$usdte, $usdce],
                 [$usdte, $musd],
+                [$usdte, $usdx],
                 [$usdte, $musd, $usdce],
                 [$usdte, $usdce, $musd],
                 [$usdte, $hub, $musd],
@@ -105,6 +108,7 @@ class ArbitrateUSDCommand extends Command
             1994 => [
                 [$usdce, $usdte],
                 [$usdce, $musd],
+                [$usdce, $usdx],
                 [$usdce, $musd, $usdte],
                 [$usdce, $usdte, $musd],
                 [$usdce, $hub, $usdte],
@@ -116,6 +120,7 @@ class ArbitrateUSDCommand extends Command
             2024 => [
                 [$musd, $usdte],
                 [$musd, $usdce],
+                [$musd, $usdx],
                 [$musd, $usdce, $usdte],
                 [$musd, $usdte, $usdce],
                 [$musd, $hub, $usdce],
@@ -123,6 +128,29 @@ class ArbitrateUSDCommand extends Command
                 [$musd, $hub, $usdte, $usdce],
                 [$musd, $hub, $hubabuba, $usdte, $usdce],
                 [$musd, $hub, $usdce, $usdte],
+            ],
+            1678 => [
+                [$usdx, $usdte],
+                [$usdx, $usdte, $usdce],
+                [$usdx, $usdte, $musd],
+                [$usdx, $usdce],
+                [$usdx, $usdce, $usdte],
+                [$usdx, $usdce, $musd],
+                [$usdx, $musd],
+                [$usdx, $musd, $usdce],
+                [$usdx, $musd, $usdte],
+                [$usdx, $hub, $usdce],
+                [$usdx, $hub, $usdte],
+                [$usdx, $hub, $musd],
+                [$usdx, $hub, $usdce, $usdte],
+                [$usdx, $hub, $usdce, $musd],
+                [$usdx, $hub, $usdte, $usdce],
+                [$usdx, $hub, $usdte, $musd],
+                [$usdx, $hub, $musd, $usdce],
+                [$usdx, $hub, $musd, $usdte],
+                [$usdx, $hub, $hubabuba, $usdte],
+                [$usdx, $hub, $hubabuba, $usdte, $usdce],
+                [$usdx, $hub, $hubabuba, $usdte, $musd],
             ],
         ];
         $api = new MinterAPI('https://api.minter.one/v2/');

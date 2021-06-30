@@ -340,7 +340,6 @@ class TestCommand extends Command
 
         $bip = new CoinDto(0, 'BIP');
         $hub = new CoinDto(1902, 'HUB');
-        $rubx = new CoinDto(1784, 'RUBX');
         $monsterHub = new CoinDto(1895, 'MONSTERHUB');
         $liquidHub = new CoinDto(1893, 'LIQUIDHUB');
         $hubChain = new CoinDto(1900, 'HUBCHAIN');
@@ -408,8 +407,6 @@ class TestCommand extends Command
                 [$bip, $usdx, $coupon, $bigmac, $bip],
             ],
             'HUB' => [
-                [$bip, $hub, $rubx, $bip],
-                [$bip, $rubx, $hub, $bip],
                 [$bip, $monsterHub, $hub, $bip],
                 [$bip, $hub, $monsterHub, $bip],
                 [$bip, $hub, $liquidHub, $bip],
@@ -436,10 +433,6 @@ class TestCommand extends Command
             'HUBABUBA' => [
                 [$bip, $hub, $hubabuba, $bip],
                 [$bip, $hubabuba, $hub, $bip],
-            ],
-            'RUBX' => [
-                [$bip, $hub, $rubx, $bip],
-                [$bip, $rubx, $hub, $bip],
             ],
         ];
 
