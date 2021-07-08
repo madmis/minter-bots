@@ -156,6 +156,8 @@ class ArbitrateUSDCommand extends Command
         $api = new MinterAPI('https://api.minter.one/v2/');
         $balance = $this->getBalance($api, $this->logger, true);
         $reqDelay = 1000000;
+        $fee = 0.02;
+        $minGasPrice = 2;
 
         while (true) {
             foreach ($balance->balance as $coinData) {
@@ -170,22 +172,33 @@ class ArbitrateUSDCommand extends Command
                                     static fn(CoinDto $coin) => $coin->getSymbol(),
                                     $route,
                                 ));
+//
+//                                try {
+//                                    $minGasPrice = (int)$api->getMinGasPrice()->min_gas_price;
+//                                    $this->logger->info("Min GAS Price: {$minGasPrice}");
+//                                } catch (Throwable $e) {
+//                                    dump($e->getMessage());
+//                                    sleep(1);
+//                                    continue;
+//                                }
 
                                 try {
                                     $this->logger->debug("R: {$r}");
 
+                                    $minAmountToBuy = $amount + ($fee * $minGasPrice);
                                     $data = new MinterSellSwapPoolTx(
                                         array_map(static fn(CoinDto $coin) => $coin->getId(), $route),
                                         $amount,
-                                        $amount + 0.02
+                                        $minAmountToBuy
                                     );
                                     $nonce = $api->getNonce($this->wallet['wallet']);
-                                    $tx = new MinterTx($nonce, $data);
+                                    $tx = (new MinterTx($nonce, $data))->setGasPrice($minGasPrice);
                                     $signedTx = $tx->sign($this->wallet['pk']);
                                     $response = $api->send($signedTx);
                                     $this->logger->info("R: {$r}");
+                                    $this->logger->info("\t Amount: {$amount}. Min Buy Amount {$minAmountToBuy}. Gas Price: {$minGasPrice}");
                                     $this->logger->info("\t", ['response' => (array) $response]);
-                                    sleep(5);
+                                    sleep(3);
                                     $balance = $this->getBalance($api, $this->logger, true);
 
                                     break 2;
@@ -213,6 +226,9 @@ class ArbitrateUSDCommand extends Command
                                     } elseif (!empty($data['error']['code']) && (int) $data['error']['code'] === 107) {
                                         $this->logger->info("Insufficient funds for sender account R: {$r}");
                                         $balance = $this->getBalance($api, $this->logger, true);
+                                    } elseif (!empty($data['error']['code']) && (int) $data['error']['code'] === 114) {
+                                        $this->logger->info($data['error']['message'], $data['error']['data']);
+                                        break 2;
                                     } else {
                                         $this->logger->error($e->getMessage(), [
                                             'content' => $e->getResponse()->getBody()->getContents(),
