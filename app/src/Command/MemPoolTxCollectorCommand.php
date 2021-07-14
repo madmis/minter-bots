@@ -94,8 +94,11 @@ class MemPoolTxCollectorCommand extends Command
                     if (in_array($txData->getType(), [24, 25, 23], true)) {
                         $first = $txData->coins[array_key_first($txData->coins)];
                         $last = $txData->coins[array_key_last($txData->coins)];
+                        $excludedSenders = [
+                            'Mxffffff116e8fbe2e15467e36e86e7208c86466b6'
+                        ];
 
-                        if ($first !== $last) {
+                        if ($first !== $last && !in_array($mtx->getSenderAddress(), $excludedSenders, true)) {
                             printf("Type: %s (%s)\n", $txData->getType(), (new DateTimeImmutable())->format('H:i:s'));
                             printf("\tSender: %s\n", $mtx->getSenderAddress());
 //                            printf("\tNonce: %s\n", $mtx->getNonce());
@@ -117,7 +120,7 @@ class MemPoolTxCollectorCommand extends Command
                                         }
                                     }
                                 }
-                                $this->bus->dispatch(new PredefinedRoutesMessage($routes));
+                                $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(0)]);
                                 $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(3000)]);
                                 $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(6000)]);
 

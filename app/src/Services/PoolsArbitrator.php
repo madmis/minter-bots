@@ -7,7 +7,6 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 use Minter\MinterAPI;
-use Minter\SDK\MinterCoins\MinterBuySwapPoolTx;
 use Minter\SDK\MinterCoins\MinterSellSwapPoolTx;
 use Minter\SDK\MinterConverter;
 use Minter\SDK\MinterTx;
@@ -63,7 +62,8 @@ class PoolsArbitrator
             $fee *= $oneBipInCustomCoinPrice;
         }
 
-        $minGetAmount = $txAmount + $fee;
+        $minGasPrice = 2;
+        $minGetAmount = $txAmount + ($fee * $minGasPrice);
 //        $this->logger->debug("\tAmount: {$txAmount}. Min get amount: {$minGetAmount}");
 
         $data = new MinterSellSwapPoolTx(
@@ -72,7 +72,7 @@ class PoolsArbitrator
             $minGetAmount
         );
         $nonce = $api->getNonce($walletAddress);
-        $tx = new MinterTx($nonce, $data);
+        $tx = (new MinterTx($nonce, $data))->setGasPrice($minGasPrice);
 
         return $tx->sign($walletPk);
     }
@@ -169,19 +169,8 @@ class PoolsArbitrator
                     usleep($reqDelay);
                 }
             } catch (ServerException $e) {
-//                $this->logger->critical(sprintf(
-//                    '%s: %s',
-//                    $e->getResponse()->getStatusCode(),
-//                    $e->getResponse()->getReasonPhrase(),
-//                ));
                 sleep(1);
             } catch (GuzzleException $e) {
-//                $this->logger->critical($e->getMessage(), [
-//                    'class' => $e::class,
-//                    'file' => $e->getFile(),
-//                    'code' => $e->getLine(),
-//                ]);
-
                 sleep(3);
             }
         }
