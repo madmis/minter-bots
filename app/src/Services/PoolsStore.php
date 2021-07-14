@@ -11,6 +11,8 @@ use JetBrains\PhpStorm\Pure;
  */
 class PoolsStore
 {
+    private array $indexedCoins = [];
+
     /**
      * coinsIndexedById.
      *
@@ -18,44 +20,11 @@ class PoolsStore
      */
     public function coinsIndexedById() : array
     {
-        return [
-            0 => new CoinDto(0, 'BIP'),
-            1902 => new CoinDto(1902, 'HUB'),
-            1895 => new CoinDto(1895, 'MONSTERHUB'),
-            1893 => new CoinDto(1893, 'LIQUIDHUB'),
-            1900 => new CoinDto(1900, 'HUBCHAIN'),
-            1934 => new CoinDto(1934, 'CAP'),
-            1942 => new CoinDto(1942, 'HUBABUBA'),
-            907 => new CoinDto(907, 'BIGMAC'),
-            1678 => new CoinDto(1678, 'USDX'),
-            1086 => new CoinDto(1086, 'QUOTA'),
-            1043 => new CoinDto(1043, 'COUPON'),
-            1087 => new CoinDto(1087, 'MICROB'),
-            1048 => new CoinDto(1048, 'FTMUSD'),
-            21 => new CoinDto(21, 'FREEDOM'),
-            1074 => new CoinDto(1074, 'YANKEE'),
-            1901 => new CoinDto(1901, 'MONEHUB'),
-            1905 => new CoinDto(1905, 'LP-59'),
-            1979 => new CoinDto(1979, 'LAMBO'),
-            1990 => new CoinDto(1990, 'FERRARI'),
-            2009 => new CoinDto(2009, 'FERRA'),
-            1993 => new CoinDto(1993, 'USDTE'),
-            1994 => new CoinDto(1994, 'USDCE'),
-            2024 => new CoinDto(2024, 'MUSD'),
-            2058 => new CoinDto(2058, 'GOLD'),
-            2064 => new CoinDto(2064, 'BTC'),
-            2065 => new CoinDto(2065, 'ETH'),
-            24 => new CoinDto(24, 'PINT'),
-            2123 => new CoinDto(2123, 'NOVOCOIN'),
-            1977 => new CoinDto(1977, 'NOVACOIN'),
-            2048 => new CoinDto(2048, 'WOLF'),
-            2054 => new CoinDto(2054, 'NAVALNY'),
-            2125 => new CoinDto(2125, 'NEVRMINTER'),
-            10 => new CoinDto(10, 'LASHIN'),
-            1692 => new CoinDto(1692, 'MARS2043'),
-            1992 => new CoinDto(1992, 'ELONMUSK'),
-            1084 => new CoinDto(1084, 'ORACUL'),
-        ];
+        if (!$this->indexedCoins) {
+            $this->indexedCoins = include "/var/www/ccbip/resources/coins.php";
+        }
+
+        return $this->indexedCoins;
     }
 
     /**

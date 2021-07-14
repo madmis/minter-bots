@@ -71,7 +71,7 @@ class MemPoolTxCollectorCommand extends Command
         while (true) {
             try {
                 $txs = (new MinterAPI('https://api.minter.one/v2/'))->getUnconfirmedTxs();
-            } catch (RequestException|ConnectException) {
+            } catch (RequestException | ConnectException) {
                 sleep(1);
                 continue;
             }
@@ -95,7 +95,7 @@ class MemPoolTxCollectorCommand extends Command
                         $first = $txData->coins[array_key_first($txData->coins)];
                         $last = $txData->coins[array_key_last($txData->coins)];
                         $excludedSenders = [
-                            'Mxffffff116e8fbe2e15467e36e86e7208c86466b6'
+                            'Mxffffff116e8fbe2e15467e36e86e7208c86466b6',
                         ];
 
                         if ($first !== $last && !in_array($mtx->getSenderAddress(), $excludedSenders, true)) {
@@ -114,9 +114,20 @@ class MemPoolTxCollectorCommand extends Command
                                 $routes = [];
                                 // TODO: собирать роуты сразу из коинов на месте компонуя их с BIP на входе и выходе
                                 foreach ($coins as $coinId1 => $coin1) {
+                                    $coinsCopy = $coins;
+                                    unset($coinsCopy[$coinId1]);
+                                    $extraRoutes = $this->buildExtraRoutes($coin1, array_keys($coinsCopy));
+//                                    dump($extraRoutes);
+
                                     foreach ($coins as $coinId2 => $coin2) {
                                         if ($coinId1 !== $coinId2) {
                                             $routes[] = [0, $coinId1, $coinId2, 0];
+                                        }
+                                    }
+
+                                    if ($extraRoutes) {
+                                        foreach ($extraRoutes as $extraRoute) {
+                                            $routes[] = [0, $extraRoute[0]['id'], $extraRoute[1]['id'], 0];
                                         }
                                     }
                                 }
@@ -133,7 +144,7 @@ class MemPoolTxCollectorCommand extends Command
                     }
                 }
             }
-            
+
             if (count($txs->transactions) > 0) {
                 sleep(1);
             } else {
@@ -142,5 +153,38 @@ class MemPoolTxCollectorCommand extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    private
+        $poolsCache = [];
+
+    /**
+     * buildExtraRoutes.
+     *
+     * @param string $needleCoinSymbol
+     * @param int[] $excludeCoinsIds
+     *
+     * @return array
+     */
+    public function buildExtraRoutes(string $needleCoinSymbol, array $excludeCoinsIds) : array
+    {
+        $excludeCoinsIds[] = 0;
+        $this->logger->info("buildExtraRoutes: {$needleCoinSymbol}", $excludeCoinsIds);
+
+        try {
+            $c = file_get_contents("https://explorer-api.minter.network/api/v2/pools?coin={$needleCoinSymbol}");
+            $data = json_decode($c, true, 512, JSON_THROW_ON_ERROR);
+            $pools = array_filter($data['data'], static function (array $pool) use ($excludeCoinsIds) {
+                return !in_array($pool['coin0']['id'], $excludeCoinsIds, false)
+                    && !in_array($pool['coin1']['id'], $excludeCoinsIds, false)
+                    && (int) $pool['trade_volume_bip_1d'] > 1000;
+            });
+
+            return array_map(static fn(array $pool) => [$pool['coin0'], $pool['coin1']], $pools);
+        } catch (Throwable $e) {
+            $this->logger->error("buildExtraRoutes: {$e->getMessage()}");
+        }
+
+        return [];
     }
 }

@@ -243,97 +243,107 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
+        $r = file_get_contents('https://explorer-api.minter.network/api/v2/coins');
+        $data = json_decode($r, true);
+
+        $str = '';
+        foreach ($data['data'] as $datum) {
+            $str .= "   {$datum['id']} => new CoinDto({$datum['id']}, '{$datum['symbol']}')," . PHP_EOL;
+        }
+
+        file_put_contents('/var/www/ccbip/resources/coins.php', $str);
+
 //        $wallet = MinterWallet::createFromMnemonic('');
 //        dump($wallet->getPrivateKey());
-        $amounts = '';
-        foreach ($input->getOption('tx-amounts') as $amount) {
-            $amounts .= " -a {$amount}";
-        }
-        Loop::run(function () use ($amounts, $input) {
-            while (true) {
-                sleep(1);
-                $indexedCoins = (new PoolsStore())->coinsIndexedById();
-                try {
-                    $txs = (new MinterAPI('https://api.minter.one/v2/'))->getUnconfirmedTxs();
-                } catch (RequestException $e) {
-                    sleep(1);
-                    continue;
-                }
-
-//            printf("Found Txs: %s\n", count($txs->transactions));
-//            printf("\tBase64: %s\n", base64_encode(json_encode($txs->transactions)));
-                $processes = [];
-                $runProcess = coroutine(function (Process $process, string $name) : iterable {
-                    $process->start();
-                    $exitCode = yield $process->join();
-                    $stdout = trim(yield $process->getStdout()->read());
-
-                    return compact('name', 'exitCode', 'stdout');
-                });
-
-                foreach ($txs->transactions as $tx) {
-                    $tx1 = explode('{', $tx);
-                    $tx2 = explode('}', $tx1[1]);
-                    try {
-                        $mtx = MinterTx::decode($tx2[0]);
-                    } catch (Throwable $e) {
-                        continue;
-                    }
-
-                    /** @var MinterSellSwapPoolTx $dt */
-                    $dt = $mtx->getData();
-
-                    if (in_array((int) $dt->getType(), [24, 25, 23], true)) {
-                        $f = $dt->coins[array_key_first($dt->coins)];
-                        $l = $dt->coins[array_key_last($dt->coins)];
-
-                        if ($f !== $l) {
-                            printf("Type: %s (%s)\n", $dt->getType(), (new DateTimeImmutable())->format('H:i:s'));
-                            printf("\tSender: %s\n", $mtx->getSenderAddress());
-                            printf("\tNonce: %s\n", $mtx->getNonce());
-
-                            $coins = [];
-                            foreach ($dt->coins as $coinId) {
-                                if (isset($indexedCoins[$coinId]) && $coinId > 0) {
-                                    $coins[] = $indexedCoins[$coinId]->getSymbol();
-                                    $command = [
-                                        '/var/www/ccbip/bin/console',
-                                        'app:named-pools:arbitrate',
-                                        "--read-node='https://api.minter.one/v2/'",
-                                        "--write-node='https://api.minter.one/v2/'",
-                                        "--req-delay={$input->getOption('req-delay')}",
-                                        $amounts,
-                                        '-i 4',
-                                        "--wallets-file={$input->getOption('wallets-file')}",
-                                        '-vvv',
-                                    ];
-                                    $command[] = "-p {$indexedCoins[$coinId]->getSymbol()}";
-                                    $cmd = implode(' ', $command);
-                                    printf("\tCMD: %s\n", $cmd);
-                                    $processes[] = new Process($cmd);
-                                    // Можно попробовать пустить через очередь - beanstalkd
-
-                                }
-                            }
-                            printf("\tRoute: %s\n", implode('=>', $coins));
-
-//                            if ($coins) {
-//                                $cmd = implode(' ', $command);
-//                                printf("\tCMD: %s\n", $cmd);
-//                                $processes[] = new Process($cmd);
+//        $amounts = '';
+//        foreach ($input->getOption('tx-amounts') as $amount) {
+//            $amounts .= " -a {$amount}";
+//        }
+//        Loop::run(function () use ($amounts, $input) {
+//            while (true) {
+//                sleep(1);
+//                $indexedCoins = (new PoolsStore())->coinsIndexedById();
+//                try {
+//                    $txs = (new MinterAPI('https://api.minter.one/v2/'))->getUnconfirmedTxs();
+//                } catch (RequestException $e) {
+//                    sleep(1);
+//                    continue;
+//                }
+//
+////            printf("Found Txs: %s\n", count($txs->transactions));
+////            printf("\tBase64: %s\n", base64_encode(json_encode($txs->transactions)));
+//                $processes = [];
+//                $runProcess = coroutine(function (Process $process, string $name) : iterable {
+//                    $process->start();
+//                    $exitCode = yield $process->join();
+//                    $stdout = trim(yield $process->getStdout()->read());
+//
+//                    return compact('name', 'exitCode', 'stdout');
+//                });
+//
+//                foreach ($txs->transactions as $tx) {
+//                    $tx1 = explode('{', $tx);
+//                    $tx2 = explode('}', $tx1[1]);
+//                    try {
+//                        $mtx = MinterTx::decode($tx2[0]);
+//                    } catch (Throwable $e) {
+//                        continue;
+//                    }
+//
+//                    /** @var MinterSellSwapPoolTx $dt */
+//                    $dt = $mtx->getData();
+//
+//                    if (in_array((int) $dt->getType(), [24, 25, 23], true)) {
+//                        $f = $dt->coins[array_key_first($dt->coins)];
+//                        $l = $dt->coins[array_key_last($dt->coins)];
+//
+//                        if ($f !== $l) {
+//                            printf("Type: %s (%s)\n", $dt->getType(), (new DateTimeImmutable())->format('H:i:s'));
+//                            printf("\tSender: %s\n", $mtx->getSenderAddress());
+//                            printf("\tNonce: %s\n", $mtx->getNonce());
+//
+//                            $coins = [];
+//                            foreach ($dt->coins as $coinId) {
+//                                if (isset($indexedCoins[$coinId]) && $coinId > 0) {
+//                                    $coins[] = $indexedCoins[$coinId]->getSymbol();
+//                                    $command = [
+//                                        '/var/www/ccbip/bin/console',
+//                                        'app:named-pools:arbitrate',
+//                                        "--read-node='https://api.minter.one/v2/'",
+//                                        "--write-node='https://api.minter.one/v2/'",
+//                                        "--req-delay={$input->getOption('req-delay')}",
+//                                        $amounts,
+//                                        '-i 4',
+//                                        "--wallets-file={$input->getOption('wallets-file')}",
+//                                        '-vvv',
+//                                    ];
+//                                    $command[] = "-p {$indexedCoins[$coinId]->getSymbol()}";
+//                                    $cmd = implode(' ', $command);
+//                                    printf("\tCMD: %s\n", $cmd);
+//                                    $processes[] = new Process($cmd);
+//                                    // Можно попробовать пустить через очередь - beanstalkd
+//
+//                                }
 //                            }
-                        }
-                    }
-                }
-
-                if ($processes) {
-                    $outputs = yield all(array_map($runProcess, $processes, array_keys($processes)));
-                    printf("Finished\n\n");
-//                    var_dump($outputs);
-                    $processes = [];
-                }
-            }
-        });
+//                            printf("\tRoute: %s\n", implode('=>', $coins));
+//
+////                            if ($coins) {
+////                                $cmd = implode(' ', $command);
+////                                printf("\tCMD: %s\n", $cmd);
+////                                $processes[] = new Process($cmd);
+////                            }
+//                        }
+//                    }
+//                }
+//
+//                if ($processes) {
+//                    $outputs = yield all(array_map($runProcess, $processes, array_keys($processes)));
+//                    printf("Finished\n\n");
+////                    var_dump($outputs);
+//                    $processes = [];
+//                }
+//            }
+//        });
 
 
         return 0;
