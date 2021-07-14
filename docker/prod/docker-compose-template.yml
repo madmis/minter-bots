@@ -5,6 +5,7 @@ services:
             context: ./php/
         image: ccbip.php:prod
         container_name: ccbip.php
+        network_mode: host
         env_file:
             - .env
         environment:
@@ -17,5 +18,6 @@ services:
             PHP_IDE_CONFIG: serverName=ccbip.local
         expose:
             - "9000"
+            - "9003"
         volumes:
             - "../../app:/var/www/ccbip"

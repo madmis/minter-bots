@@ -511,4 +511,37 @@ class PoolsStore
             ],
         ];
     }
+
+    /**
+     * allCoins.
+     *
+     * @var array
+     */
+    private array $allCoins = [];
+
+    /**
+     * allCoins.
+     *
+     * @return array
+     */
+    public function allCoins() : array
+    {
+        if (!$this->allCoins) {
+            $this->allCoins = include __DIR__ . '/../../public/coinsList.php';
+        }
+
+        return $this->allCoins;
+    }
+
+    /**
+     * coinById.
+     *
+     * @param int $coinId
+     *
+     * @return CoinDto
+     */
+    public function coinById(int $coinId) : CoinDto
+    {
+        return $this->allCoins()[$coinId];
+    }
 }
