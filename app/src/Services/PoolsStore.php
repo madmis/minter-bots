@@ -11,8 +11,6 @@ use JetBrains\PhpStorm\Pure;
  */
 class PoolsStore
 {
-    private array $indexedCoins = [];
-
     /**
      * coinsIndexedById.
      *
@@ -20,11 +18,7 @@ class PoolsStore
      */
     public function coinsIndexedById() : array
     {
-        if (!$this->indexedCoins) {
-            $this->indexedCoins = include "/var/www/ccbip/resources/coins.php";
-        }
-
-        return $this->indexedCoins;
+        return $this->allCoins();
     }
 
     /**
@@ -527,7 +521,7 @@ class PoolsStore
     public function allCoins() : array
     {
         if (!$this->allCoins) {
-            $this->allCoins = include __DIR__ . '/../../public/coinsList.php';
+            $this->allCoins = include __DIR__ . '/../../resources/coins.php';
         }
 
         return $this->allCoins;

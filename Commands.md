@@ -127,7 +127,7 @@ OR
 ```
 # ***HUB
 ./bin/console app:stable:arbitrate --coins-ids=1893,1895,1901,2025 --trade-amount=0.05 --min-margin=0.005 \
-    --wallets-file=/var/www/ccbip/resources/wallets/ae2889.json -vvv
+    --wallets-file=/var/www/ccbip/resources/wallets/ae2889.json
     
 # **USD
 ./bin/console app:stable:arbitrate --coins-ids=1993,1994,2024,1678 --trade-amount=10 --min-margin=0.05 \

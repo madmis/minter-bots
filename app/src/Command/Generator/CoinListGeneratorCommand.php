@@ -80,7 +80,7 @@ TPL;
         }
 
         $fileData = sprintf($mainTpl, implode(PHP_EOL, $coins));
-        $filePath = __DIR__ . '/../../../public/coinsList.php';
+        $filePath = __DIR__ . '/../../../resources/coins.php';
         file_put_contents($filePath, $fileData);
 
         return self::SUCCESS;
