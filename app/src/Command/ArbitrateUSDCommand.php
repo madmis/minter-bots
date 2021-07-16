@@ -226,6 +226,7 @@ class ArbitrateUSDCommand extends Command
                                     } elseif (!empty($data['error']['code']) && (int) $data['error']['code'] === 107) {
                                         $this->logger->info("Insufficient funds for sender account R: {$r}");
                                         $balance = $this->getBalance($api, $this->logger, true);
+                                        break 2;
                                     } elseif (!empty($data['error']['code']) && (int) $data['error']['code'] === 114) {
                                         $this->logger->info($data['error']['message'], $data['error']['data']);
                                         break 2;
