@@ -160,6 +160,8 @@ class ArbitrateUSDCommand extends Command
         $minGasPrice = 2;
 
         while (true) {
+            $balance = $this->getBalance($api, $this->logger, false);
+
             foreach ($balance->balance as $coinData) {
                 if (isset($routes[$coinData->coin->id])) {
                     $amount = (float) MinterConverter::convertToBase($coinData->value);

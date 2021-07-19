@@ -101,6 +101,8 @@ class ArbitrateStableFromBalanceCommand extends Command
         $minGasPrice = 2;
 
         while (true) {
+            $balance = $this->getBalance($api, $this->logger, false, $wallet);
+
             foreach ($balance->balance as $coinData) {
                 if (isset($coins[$coinData->coin->id])) {
                     $amount = (float) MinterConverter::convertToBase($coinData->value);

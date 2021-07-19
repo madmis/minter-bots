@@ -136,7 +136,7 @@ class ArbitrateLhubMHubCommand extends Command
                 [$monsterHub, $bip, $oracul],
                 [$monsterHub, $bip, $liquidHub],
                 [$monsterHub, $oracul, $liquidHub],
-                [$monsterHub, $liquidHub, $oracul, ],
+                [$monsterHub, $liquidHub, $oracul,],
                 [$monsterHub, $hub, $bip, $liquidHub],
                 [$monsterHub, $hub, $liquidHub],
                 [$monsterHub, $hub, $moneHub, $liquidHub],
@@ -165,6 +165,8 @@ class ArbitrateLhubMHubCommand extends Command
         $minGasPrice = 2;
 
         while (true) {
+            $balance = $this->getBalance($api, $this->logger, false);
+
             foreach ($balance->balance as $coinData) {
                 if (isset($routes[$coinData->coin->id])) {
                     $amount = (float) MinterConverter::convertToBase($coinData->value);
