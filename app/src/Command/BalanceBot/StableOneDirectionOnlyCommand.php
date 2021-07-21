@@ -105,7 +105,6 @@ class StableOneDirectionOnlyCommand extends Command
                 try {
                     try {
                         $this->logger->debug("R: {$tRoute}");
-                        dump((string)$getAmount, (string)$minMargin);
                         $minAmountToBuy = bcadd((string)$getAmount, (string)$minMargin, 8);
                         $this->logger->debug("minAmountToBuy: {$minAmountToBuy}");
                         $data = new MinterSellSwapPoolTx(
