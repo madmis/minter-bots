@@ -516,7 +516,7 @@ class PoolsStore
     /**
      * allCoins.
      *
-     * @return array
+     * @return CoinDto[]
      */
     public function allCoins() : array
     {

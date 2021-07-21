@@ -71,12 +71,21 @@ return [
 TPL;
         $coinTpl = <<<TPL
     %d => new CoinDto(%d, '%s'),    
+    '%s' => new CoinDto(%d, '%s'),    
 TPL;
 
         $coins = [];
 
         foreach ($data['data'] as $coin) {
-            $coins[] = sprintf($coinTpl, $coin['id'], $coin['id'], $coin['symbol']);
+            $coins[] = sprintf(
+                $coinTpl,
+                $coin['id'],
+                $coin['id'],
+                $coin['symbol'],
+                $coin['symbol'],
+                $coin['id'],
+                $coin['symbol'],
+            );
         }
 
         $fileData = sprintf($mainTpl, implode(PHP_EOL, $coins));
