@@ -56,6 +56,13 @@ class StableOneDirectionOnlyCommand extends Command
             ->setDescription('Arbitrate stables one direction, like: LIQUIDHUB=>MONSTERHUB. Working with coins on balance')
             ->addOption('route', null, InputOption::VALUE_REQUIRED, 'Route to trade: LIQUIDHUB=>MONSTERHUB', '')
             ->addOption('trade-amount', null, InputOption::VALUE_REQUIRED, 'Trade amount', 100)
+            ->addOption(
+                'get-amount',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Get amount. Its required for example for route MICROB=>BTC. Sell 100 MICROB, Get 0.000100 BTC (margin will be added to this amount)',
+                null
+            )
             ->addOption('min-margin', null, InputOption::VALUE_REQUIRED, 'Minimum margin amount', 1)
             ->addOption(
                 'wallets-file',
@@ -81,8 +88,9 @@ class StableOneDirectionOnlyCommand extends Command
         $walletsFile = $input->getOption('wallets-file');
         $wallets = array_values(json_decode(file_get_contents($walletsFile), true, 512, JSON_THROW_ON_ERROR));
         $walletIdx = array_rand($wallets);
-        $tradeAmount = (float) $input->getOption('trade-amount');
-        $minMargin = (float) $input->getOption('min-margin');
+        $tradeAmount = $input->getOption('trade-amount');
+        $getAmount = $input->getOption('get-amount') ?? $tradeAmount;
+        $minMargin = $input->getOption('min-margin');
         $wallet = $wallets[$walletIdx];
         $balance = $this->getBalance($api, $this->logger, false, $wallet);
         $reqDelay = 0;
@@ -97,11 +105,12 @@ class StableOneDirectionOnlyCommand extends Command
                 try {
                     try {
                         $this->logger->debug("R: {$tRoute}");
-                        $minAmountToBuy = $tradeAmount + $minMargin;
+                        dump((string)$getAmount, (string)$minMargin);
+                        $minAmountToBuy = bcadd((string)$getAmount, (string)$minMargin, 8);
                         $this->logger->debug("minAmountToBuy: {$minAmountToBuy}");
                         $data = new MinterSellSwapPoolTx(
                             [$firstId, $secondId],
-                            $tradeAmount,
+                            (string)$tradeAmount,
                             $minAmountToBuy
                         );
                         $nonce = $api->getNonce($wallet['wallet']);
