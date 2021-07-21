@@ -107,6 +107,11 @@ class MemPoolTxCollectorTestCommand extends Command
 
 //                    if (in_array($txData->getType(), [24, 25, 23], true)) {
                     if ($txData->getType() === 23) {
+//                        $indexedCoins
+
+                        dump($txData->coins);
+                        dump($txData);
+
                         $first = $txData->coins[array_key_first($txData->coins)];
                         $last = $txData->coins[array_key_last($txData->coins)];
 
@@ -161,24 +166,24 @@ class MemPoolTxCollectorTestCommand extends Command
 //                                            $route,
 //                                        ));
 //                                        $this->logger->debug("R: {$r}");
-                                    $signedTx = $this->signTx(
-                                        $coins,
-                                        $amount,
-                                        $readApi,
-                                        $walletAddress,
-                                        $walletPk,
-                                        $nonce,
-                                    );
-                                    $opts = [
-                                        'http' => [
-                                            'method' => 'GET',
-                                            'header' => 'Content-Type: application/json',
-                                        ],
-                                    ];
+//                                    $signedTx = $this->signTx(
+//                                        $coins,
+//                                        $amount,
+//                                        $readApi,
+//                                        $walletAddress,
+//                                        $walletPk,
+//                                        $nonce,
+//                                    );
+//                                    $opts = [
+//                                        'http' => [
+//                                            'method' => 'GET',
+//                                            'header' => 'Content-Type: application/json',
+//                                        ],
+//                                    ];
 
-                                    $context = stream_context_create($opts);
-                                    $result = file_get_contents("https://api.minter.one/v2/send_transaction/{$signedTx}");
-                                    dump($result);
+//                                    $context = stream_context_create($opts);
+//                                    $result = file_get_contents("https://api.minter.one/v2/send_transaction/{$signedTx}");
+//                                    dump($result);
 //                                        $response = $writeApi->send($signedTx);
 //                                        $this->logger->info("R: {$r}");
 //                                        $this->logger->info("\t", ['response' => (array) $response]);

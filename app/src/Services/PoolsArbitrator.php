@@ -171,7 +171,7 @@ class PoolsArbitrator
             } catch (ServerException $e) {
                 sleep(1);
             } catch (GuzzleException $e) {
-                sleep(3);
+                sleep(1);
             }
         }
     }

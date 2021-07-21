@@ -132,8 +132,8 @@ class MemPoolTxCollectorCommand extends Command
                                     }
                                 }
                                 $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(0)]);
-                                $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(3000)]);
-                                $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(6000)]);
+//                                $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(3000)]);
+//                                $this->bus->dispatch(new PredefinedRoutesMessage($routes), [new DelayStamp(6000)]);
 
 //                                foreach ($coins as $coinId => $coin) {
 //                                    $this->bus->dispatch(new OneCoinMessage($coinId));
@@ -146,7 +146,7 @@ class MemPoolTxCollectorCommand extends Command
             }
 
             if (count($txs->transactions) > 0) {
-                sleep(1);
+                usleep(1);
             } else {
                 usleep(200000);
             }
