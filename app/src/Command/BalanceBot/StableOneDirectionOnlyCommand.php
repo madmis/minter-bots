@@ -98,10 +98,11 @@ class StableOneDirectionOnlyCommand extends Command
 
         while (true) {
             $coinBalance = $this->findCoinOnBalance($balance, $firstId);
-            $amount = (float) MinterConverter::convertToBase($coinBalance->value);
+            $amount = MinterConverter::convertToBase($coinBalance->value);
 
-            if ($amount >= $tradeAmount) {
+//            $this->logger->info(sprintf("Amount: %.8f. Trade Amount: %.8f", $amount, $tradeAmount));
 
+            if (bccomp($amount, $tradeAmount, 8) !== -1) {
                 try {
                     try {
                         $this->logger->debug("R: {$tRoute}");
