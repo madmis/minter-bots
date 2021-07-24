@@ -276,13 +276,10 @@ class ArbitrateUSDCommand extends Command
             }
         };
 
-        try {
-            $balance = $api->getBalance($this->wallet['wallet']);
-            if ($print) {
-                $fnPrint($balance);
-            }
-        } catch (Throwable) {
-            sleep(2);
+
+        $balance = null;
+
+        do {
             try {
                 $balance = $api->getBalance($this->wallet['wallet']);
                 if ($print) {
@@ -290,13 +287,32 @@ class ArbitrateUSDCommand extends Command
                 }
             } catch (Throwable) {
                 sleep(2);
-                $balance = $api->getBalance($this->wallet['wallet']);
-                if ($print) {
-                    $fnPrint($balance);
-                }
             }
-        }
+        } while (!$balance);
 
         return $balance;
+
+//        try {
+//            $balance = $api->getBalance($this->wallet['wallet']);
+//            if ($print) {
+//                $fnPrint($balance);
+//            }
+//        } catch (Throwable) {
+//            sleep(2);
+//            try {
+//                $balance = $api->getBalance($this->wallet['wallet']);
+//                if ($print) {
+//                    $fnPrint($balance);
+//                }
+//            } catch (Throwable) {
+//                sleep(2);
+//                $balance = $api->getBalance($this->wallet['wallet']);
+//                if ($print) {
+//                    $fnPrint($balance);
+//                }
+//            }
+//        }
+//
+//        return $balance;
     }
 }
