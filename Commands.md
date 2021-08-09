@@ -112,6 +112,14 @@ OR
 #    -a 0.4 --req-delay=0 -i 10000000 -p CUSTOM-LIQUIDHUB -p CUSTOM-MONSTERHUB -p CUSTOM-MONEHUB \
 #    --wallets-file=/var/www/ccbip/resources/wallets/ae2889.json \
 #    --custom-coin-pool --one-bip-in-custom-coin-price=0.0001 |& tee -a ./var/log/custom-monehub.txt &
+
+./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
+    -a 12 --req-delay=0 -i 10000000 -p CUSTOM-USDTE-2 \
+    --wallets-file=/var/www/ccbip/resources/wallets/a5f12d.json \
+    --custom-coin-pool --one-bip-in-custom-coin-price=0.004 |& tee -a ./var/log/custom-usdte-2.txt &
+
+
+
 ```
 
 ### Super custom

@@ -66,6 +66,12 @@ class PoolsStore
         $oracul = new CoinDto(1084, 'ORACUL');
 
         return [
+            'CUSTOM-USDTE-2' => [
+                [$usdte, $musd, $hub, $usdte],
+                [$usdte, $hub, $musd, $usdte],
+                [$usdte, $hub, $bip, $usdte],
+                [$usdte, $bip, $hub, $usdte],
+            ],
             'BTC' => [
                 [$bip, $usdte, $btc, $bip],
                 [$bip, $btc, $usdte, $bip],
