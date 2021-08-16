@@ -76,16 +76,16 @@ OR
 ####
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 2300 -a 2200 -a 2100 --req-delay=0 -i 10000000 -p HUB \
+    -a 2860 -a 2850 -a 2840 --req-delay=0 -i 10000000000 -p HUB \
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 7400 -a 7390 -a 7380 --req-delay=0 -i 10000000 \
+    -a 8240 -a 8230 -a 8220 --req-delay=0 -i 1000000000 \
     -p LIQUIDHUB -p HUBABUBA -p BIGMAC -p COUPON -p QUOTA -p MICROB -p LAMBO -p USDTE  -p MONSTERHUB -p MICROB -p CAP -p HUBCHAIN -p MONEHUB -p USDX \
     --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 800 -a 790 -a 780 --req-delay=0 -i 10000000 -p MUSD -p FERRARI -p YANKEE -p FTMUSD -p FREEDOM  \
+    -a 1050 -a 1040 -a 1030 --req-delay=0 -i 1000000000 -p MUSD -p FERRARI -p YANKEE -p FTMUSD -p FREEDOM  \
     --wallets-file=/var/www/ccbip/resources/wallets/4-f94060-3c0965.json |& tee -a ./var/log/3.txt &
 ```
 
@@ -123,7 +123,7 @@ OR
     --custom-coin-pool --one-bip-in-custom-coin-price=0.3 |& tee -a ./var/log/custom-microb.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 2.98 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
+    -a 2.99 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
     --wallets-file=/var/www/ccbip/resources/wallets/eee5c7.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.002 |& tee -a ./var/log/custom-bigmac.txt &
 
@@ -141,32 +141,32 @@ OR
 
 ```
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 12.3 --req-delay=0 -i 10000000 -p CUSTOM-USDTE-2 \
+    -a 13.17 --req-delay=0 -i 10000000000 -p CUSTOM-USDTE-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a5f12d.json \
-    --custom-coin-pool --one-bip-in-custom-coin-price=0.005 |& tee -a ./var/log/custom-usdte-2.txt &
+    --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdte-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 13.9 --req-delay=0 -i 10000000 -p CUSTOM-USDX-2 \
+    -a 14.14 --req-delay=0 -i 10000000000 -p CUSTOM-USDX-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a5f12d.json \
-    --custom-coin-pool --one-bip-in-custom-coin-price=0.005 |& tee -a ./var/log/custom-usdx-2.txt &
+    --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdx-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 12.4 --req-delay=0 -i 10000000 -p CUSTOM-USDCE-2 \
+    -a 12.47 --req-delay=0 -i 1000000000 -p CUSTOM-USDCE-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/c9896e.json \
-    --custom-coin-pool --one-bip-in-custom-coin-price=0.005 |& tee -a ./var/log/custom-usdce-2.txt &
+    --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdce-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 12.5 --req-delay=0 -i 10000000 -p CUSTOM-MUSD-2 \
+    -a 13.64 --req-delay=0 -i 1000000000 -p CUSTOM-MUSD-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a23b3e.json \
-    --custom-coin-pool --one-bip-in-custom-coin-price=0.005 |& tee -a ./var/log/custom-musd-2.txt &
+    --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-musd-2.txt &
 ```
 
 ## Mempool
 
 ```
 # Collector
-./bin/console app:mempool:tx:collector
+./bin/console app:mempool:tx:collector |& tee -a ./var/log/mempool-tx-collector.txt &
 
 # Consumer
-./bin/console messenger:consume tx_notify
+./bin/console messenger:consume tx_notify |& tee -a ./var/log/mempool-tx-consumer.txt &
 ```
