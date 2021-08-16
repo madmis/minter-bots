@@ -151,7 +151,7 @@ OR
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdx-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 12.47 --req-delay=0 -i 1000000000 -p CUSTOM-USDCE-2 \
+    -a 15.80 --req-delay=0 -i 1000000000 -p CUSTOM-USDCE-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/c9896e.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdce-2.txt &
 
