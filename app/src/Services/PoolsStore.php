@@ -51,7 +51,6 @@ class PoolsStore
         $usdte = new CoinDto(1993, 'USDTE');
         $usdce = new CoinDto(1994, 'USDCE');
         $musd = new CoinDto(2024, 'MUSD');
-        $gold = new CoinDto(2058, 'GOLD');
         $btc = new CoinDto(2064, 'BTC');
         $eth = new CoinDto(2065, 'ETH');
         $pint = new CoinDto(24, 'PINT');
@@ -311,21 +310,6 @@ class PoolsStore
                 [$microb, $hub, $hubabuba, $bip, $microb],
                 [$microb, $bip, $hubabuba, $hub, $microb],
             ],
-            'GOLD' => [
-                [$bip, $hub, $gold, $bip],
-                [$bip, $gold, $hub, $bip],
-                [$bip, $gold, $liquidHub, $hub, $bip],
-                [$bip, $musd, $gold, $bip],
-                [$bip, $gold, $musd, $bip],
-                [$bip, $usdte, $gold, $bip],
-                [$bip, $gold, $usdte, $bip],
-                [$bip, $liquidHub, $gold, $bip],
-                [$bip, $gold, $liquidHub, $bip],
-                [$bip, $hub, $liquidHub, $gold, $bip],
-                [$bip, $musd, $usdte, $gold, $bip],
-                [$bip, $usdte, $musd, $gold, $bip],
-                [$bip, $hub, $usdte, $gold, $bip],
-            ],
             'MUSD' => [
                 [$bip, $musd, $usdte, $hub, $bip],
                 [$bip, $usdte, $musd, $hub, $bip],
@@ -347,8 +331,6 @@ class PoolsStore
                 [$bip, $hub, $usdte, $bip],
                 [$bip, $hub, $usdte, $usdce, $bip],
                 [$bip, $usdte, $hub, $bip],
-                [$bip, $usdte, $gold, $bip],
-                [$bip, $usdte, $gold, $hub, $bip],
             ],
             'FERRARI' => [
                 [$bip, $ferrari, $monsterHub, $bip],
@@ -446,10 +428,7 @@ class PoolsStore
                 [$bip, $lambo, $hub, $bip],
                 [$bip, $hub, $usdte, $bip],
                 [$bip, $usdte, $hub, $bip],
-                [$bip, $usdte, $gold, $hub, $bip],
                 [$bip, $usdce, $musd, $hub, $bip],
-                [$bip, $hub, $gold, $bip],
-                [$bip, $hub, $gold, $usdte, $bip],
             ],
             'MONSTERHUB' => [
                 [$bip, $monsterHub, $hub, $bip],
@@ -473,7 +452,6 @@ class PoolsStore
                 [$bip, $musd, $hub, $liquidHub, $bip],
                 [$bip, $usdce, $hub, $liquidHub, $bip],
                 [$bip, $usdx, $hub, $liquidHub, $bip],
-                [$bip, $liquidHub, $hub, $gold, $bip],
             ],
             'CAP' => [
                 [$bip, $hub, $cap, $bip],
@@ -519,7 +497,6 @@ class PoolsStore
         $usdte = new CoinDto(1993, 'USDTE');
         $usdce = new CoinDto(1994, 'USDCE');
         $musd = new CoinDto(2024, 'MUSD');
-        $gold = new CoinDto(2058, 'GOLD');
         $btc = new CoinDto(2064, 'BTC');
         $eth = new CoinDto(2065, 'ETH');
         $oracul = new CoinDto(1084, 'ORACUL');
