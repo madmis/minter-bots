@@ -63,6 +63,7 @@ class PoolsStore
         $mars2043 = new CoinDto(1692, 'MARS2043');
         $elonMusk = new CoinDto(1992, 'ELONMUSK');
         $oracul = new CoinDto(1084, 'ORACUL');
+        $only1hub = new CoinDto(2025, 'ONLY1HUB');
 
         return [
             'CUSTOM-USDTE-2' => [
@@ -123,16 +124,6 @@ class PoolsStore
                 [$bip, $btc, $eth, $bip],
                 [$bip, $eth, $btc, $bip],
             ],
-            'CUSTOM-MONEHUB' => [
-                [$moneHub, $bip, $hub, $moneHub],
-                [$moneHub, $hub, $bip, $moneHub],
-                [$moneHub, $liquidHub, $bip, $moneHub],
-                [$moneHub, $bip, $liquidHub, $moneHub],
-                [$moneHub, $liquidHub, $hub, $moneHub],
-                [$moneHub, $hub, $liquidHub, $moneHub],
-                [$moneHub, $bip, $oracul, $moneHub],
-                [$moneHub, $oracul, $bip, $moneHub],
-            ],
             'CUSTOM-HUBABUBA' => [
                 [$hubabuba, $bip, $hub, $hubabuba],
                 [$hubabuba, $hub, $bip, $hubabuba],
@@ -144,6 +135,26 @@ class PoolsStore
                 [$hubabuba, $hub, $usdte, $hubabuba],
                 [$hubabuba, $cap, $bip, $hubabuba],
                 [$hubabuba, $bip, $cap, $hubabuba],
+            ],
+            'CUSTOM-ONLY1HUB' => [
+                [$only1hub, $liquidHub, $hub, $only1hub],
+                [$only1hub, $hub, $liquidHub, $only1hub],
+                [$only1hub, $oracul, $liquidHub, $only1hub],
+                [$only1hub, $liquidHub, $oracul, $only1hub],
+                [$only1hub, $oracul, $hub, $only1hub],
+                [$only1hub, $hub, $oracul, $only1hub],
+                [$only1hub, $hub, $bip, $liquidHub, $only1hub],
+                [$only1hub, $liquidHub, $bip, $hub, $only1hub],
+            ],
+            'CUSTOM-MONEHUB' => [
+                [$moneHub, $bip, $hub, $moneHub],
+                [$moneHub, $hub, $bip, $moneHub],
+                [$moneHub, $liquidHub, $bip, $moneHub],
+                [$moneHub, $bip, $liquidHub, $moneHub],
+                [$moneHub, $liquidHub, $hub, $moneHub],
+                [$moneHub, $hub, $liquidHub, $moneHub],
+                [$moneHub, $bip, $oracul, $moneHub],
+                [$moneHub, $oracul, $bip, $moneHub],
             ],
             'CUSTOM-LIQUIDHUB' => [
                 [$liquidHub, $bip, $hub, $liquidHub],
