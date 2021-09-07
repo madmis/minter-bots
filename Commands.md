@@ -75,12 +75,6 @@ OR
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 ####
 
-### MOST Valueable coins
-# HUB HUBABUBA HUBCHAIN
-# LIQUIDHUB MONEHUB MONSTERHUB ONLY1HUB
-# MUSD USDTE USDCE
-# BEE BTC ETH ARCONA 
-
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
     -a 5100 --req-delay=0 -i 10000000000 -p HUB -p HUBABUBA -p HUBCHAIN \
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
@@ -160,7 +154,7 @@ OR
     --custom-coin-pool --one-bip-in-custom-coin-price=0.0002 |& tee -a ./var/log/custom-liquidhub.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 0.29 --req-delay=0 -i 10000000 -p CUSTOM-MONSTERHUB \
+    -a 0.3 --req-delay=0 -i 10000000 -p CUSTOM-MONSTERHUB \
     --wallets-file=/var/www/ccbip/resources/wallets/ae2889.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.0002 |& tee -a ./var/log/custom-monsterhub.txt &
 
@@ -176,17 +170,17 @@ OR
 #    --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdce-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 56.25 --req-delay=0 -i 10000000000 -p CUSTOM-USDTE-2 \
+    -a 57.55 --req-delay=0 -i 10000000000 -p CUSTOM-USDTE-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a5f12d.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdte-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 15.24 --req-delay=0 -i 10000000000 -p CUSTOM-USDX-2 \
+    -a 15.28 --req-delay=0 -i 10000000000 -p CUSTOM-USDX-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a5f12d.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdx-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 61.35 --req-delay=0 -i 1000000000 -p CUSTOM-MUSD-2 \
+    -a 61.90 --req-delay=0 -i 1000000000 -p CUSTOM-MUSD-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a23b3e.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-musd-2.txt &
 ```
