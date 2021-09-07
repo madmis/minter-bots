@@ -76,22 +76,27 @@ OR
 ####
 
 ### MOST Valueable coins
-# HUB, MUSD, BEE, HUBABUBA, USDTE, USDCE, BTC, ETH, LIQUIDHUB, MONEHUB, ARCONA, MONSTERHUB, USDX, ONLY1HUB
-# HUBCHAIN
-
+# HUB HUBABUBA HUBCHAIN
+# LIQUIDHUB MONEHUB MONSTERHUB ONLY1HUB
+# MUSD USDTE USDCE
+# BEE BTC ETH ARCONA 
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 2860 -a 2850 -a 2840 --req-delay=0 -i 10000000000 -p HUB \
+    -a 5100 --req-delay=0 -i 10000000000 -p HUB -p HUBABUBA -p HUBCHAIN \
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 8240 -a 8230 -a 8220 --req-delay=0 -i 1000000000 \
-    -p LIQUIDHUB -p HUBABUBA -p BIGMAC -p COUPON -p QUOTA -p MICROB -p USDTE  -p MONSTERHUB -p MICROB -p CAP -p HUBCHAIN -p MONEHUB -p USDX \
-    --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/2.txt &
+    -a 5120  --req-delay=0 -i 1000000000 \
+    -p LIQUIDHUB -p MONEHUB -p MONSTERHUB -p ONLY1HUB \
+    --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 1050 -a 1040 -a 1030 --req-delay=0 -i 1000000000 -p MUSD -p FERRARI -p YANKEE -p FTMUSD -p FREEDOM  \
-    --wallets-file=/var/www/ccbip/resources/wallets/4-f94060-3c0965.json |& tee -a ./var/log/3.txt &
+    -a 1050 -a 1040 -a 1030 --req-delay=0 -i 1000000000 -p MUSD -p USDTE -p USDCE  \
+    --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/3.txt &
+
+./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
+    -a 1050 -a 1040 -a 1030 --req-delay=0 -i 1000000000 -p BEE -p BTC -p ETH -p ARCONA  \
+    --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/3.txt &
 ```
 
 ### CUSTOM

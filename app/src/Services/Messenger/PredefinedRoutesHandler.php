@@ -43,7 +43,7 @@ class PredefinedRoutesHandler implements MessageHandlerInterface
     {
         $indexedCoins = (new PoolsStore())->coinsIndexedById();
         $arbitrator = new PoolsArbitrator($this->logger);
-        $txAmount = 7000;
+        $txAmount = 8351;
         $readApi = new MinterAPI('https://api.minter.one/v2/');
         $writeApi = new MinterAPI('https://api.minter.one/v2/');
         $walletsFile = '/var/www/ccbip/resources/wallets/2-be1564-858cfa.json';
