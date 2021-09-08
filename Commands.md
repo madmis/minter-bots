@@ -85,12 +85,12 @@ OR
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 1050 -a 1040 -a 1030 --req-delay=0 -i 1000000000 -p MUSD -p USDTE -p USDCE  \
+    -a 8370 --req-delay=0 -i 1000000000 -p MUSD -p USDTE -p USDCE  \
     --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/3.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 1050 -a 1040 -a 1030 --req-delay=0 -i 1000000000 -p BEE -p BTC -p ETH -p ARCONA  \
-    --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/3.txt &
+    -a 8380 --req-delay=0 -i 1000000000 -p BEE -p BTC -p ETH -p ARCONA  \
+    --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/4.txt &
 ```
 
 ### CUSTOM
