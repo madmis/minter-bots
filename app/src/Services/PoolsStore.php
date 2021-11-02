@@ -66,6 +66,7 @@ class PoolsStore
         $only1hub = new CoinDto(2025, 'ONLY1HUB');
         $arcona = new CoinDto(2137, 'ARCONA');
         $bee = new CoinDto(2361, 'BEE');
+        $bipBill = new CoinDto(2734, 'BIPBILL');
 
         return [
             'CUSTOM-USDTE-2' => [
@@ -75,6 +76,10 @@ class PoolsStore
                 [$usdte, $hub, $usdce, $usdte],
                 [$usdte, $hub, $bip, $usdte],
                 [$usdte, $bip, $hub, $usdte],
+                [$usdte, $arcona, $bip, $usdte],
+                [$usdte, $bip, $arcona, $usdte],
+                [$usdte, $arcona, $musd, $usdte],
+                [$usdte, $musd, $arcona, $usdte],
             ],
             'CUSTOM-USDCE-2' => [
                 [$usdce, $musd, $hub, $usdce],
@@ -91,6 +96,12 @@ class PoolsStore
                 [$musd, $hub, $usdce, $musd],
                 [$musd, $hub, $bip, $musd],
                 [$musd, $bip, $hub, $musd],
+                [$musd, $bip, $eth, $musd],
+                [$musd, $eth, $bip, $musd],
+                [$musd, $arcona, $usdte, $musd],
+                [$musd, $usdte, $arcona, $musd],
+                [$musd, $arcona, $bip, $musd],
+                [$musd, $bip, $arcona, $musd],
             ],
             'CUSTOM-USDX-2' => [
                 [$usdx, $usdte, $hub, $usdx],
@@ -103,8 +114,12 @@ class PoolsStore
             'ARCONA' => [
                 [$bip, $musd, $arcona, $bip],
                 [$bip, $arcona, $musd, $bip],
+                [$bip, $usdte, $arcona, $bip],
+                [$bip, $arcona, $usdte, $bip],
                 [$bip, $hub, $arcona, $bip],
                 [$bip, $arcona, $hub, $bip],
+                [$bip, $arcona, $bipBill, $bip],
+                [$bip, $bipBill, $arcona, $bip],
             ],
             'BTC' => [
                 [$bip, $usdte, $btc, $bip],
