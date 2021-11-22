@@ -76,20 +76,20 @@ OR
 ####
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 10301 --req-delay=0 -i 10000000000 -p HUB -p HUBABUBA -p HUBCHAIN \
+    -a 10301 --req-delay=0 -i 10000000000 -p HUB -p HUBABUBA -p HUBCHAIN -p TON -p SHIB \
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/1.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
     -a 10302  --req-delay=0 -i 1000000000 \
-    -p LIQUIDHUB -p MONEHUB -p MONSTERHUB -p ONLY1HUB \
+    -p LIQUIDHUB -p MONEHUB -p MONSTERHUB -p ONLY1HUB -p TON -p SHIB \
     --wallets-file=/var/www/ccbip/resources/wallets/1-4e4557-5d097c.json |& tee -a ./var/log/2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 13501 --req-delay=0 -i 1000000000 -p MUSD -p USDTE -p USDCE  \
+    -a 13501 --req-delay=0 -i 1000000000 -p MUSD -p USDTE -p USDCE -p TON -p SHIB \
     --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/3.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 13502 --req-delay=0 -i 1000000000 -p BEE -p BTC -p ETH -p ARCONA  \
+    -a 13502 --req-delay=0 -i 1000000000 -p BEE -p BTC -p ETH -p ARCONA -p TON -p SHIB \
     --wallets-file=/var/www/ccbip/resources/wallets/2-be1564-858cfa.json |& tee -a ./var/log/4.txt &
 ```
 

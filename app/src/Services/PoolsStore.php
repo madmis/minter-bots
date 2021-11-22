@@ -67,6 +67,8 @@ class PoolsStore
         $arcona = new CoinDto(2137, 'ARCONA');
         $bee = new CoinDto(2361, 'BEE');
         $bipBill = new CoinDto(2734, 'BIPBILL');
+        $ton = new CoinDto(3324, 'TON');
+        $shib = new CoinDto(3258, 'SHIB');
 
         return [
             'CUSTOM-USDTE-2' => [
@@ -102,6 +104,10 @@ class PoolsStore
                 [$musd, $usdte, $arcona, $musd],
                 [$musd, $arcona, $bip, $musd],
                 [$musd, $bip, $arcona, $musd],
+                [$musd, $bee, $bip, $musd],
+                [$musd, $bip, $bee, $musd],
+                [$musd, $hub, $bee, $musd],
+                [$musd, $bee, $hub, $musd],
             ],
             'CUSTOM-USDX-2' => [
                 [$usdx, $usdte, $hub, $usdx],
@@ -110,6 +116,22 @@ class PoolsStore
                 [$usdx, $hub, $musd, $usdx],
                 [$usdx, $hub, $bip, $usdx],
                 [$usdx, $bip, $hub, $usdx],
+            ],
+            'TON' => [
+                [$bip, $ton, $musd, $bip],
+                [$bip, $musd, $ton, $bip],
+                [$bip, $ton, $usdte, $bip],
+                [$bip, $usdte, $ton, $bip],
+                [$bip, $usdx, $ton, $bip],
+                [$bip, $ton, $usdx, $bip],
+            ],
+            'SHIB' => [
+                [$bip, $shib, $usdte, $bip],
+                [$bip, $usdte, $shib, $bip],
+                [$bip, $shib, $hubabuba, $bip],
+                [$bip, $hubabuba, $shib, $bip],
+                [$bip, $usdx, $shib, $bip],
+                [$bip, $shib, $usdx, $bip],
             ],
             'ARCONA' => [
                 [$bip, $musd, $arcona, $bip],
@@ -332,12 +354,15 @@ class PoolsStore
             ],
             'CUSTOM-MICROB' => [
                 [$microb, $usdx, $bip, $microb],
+                [$microb, $bip, $usdx, $microb],
                 [$microb, $hub, $bip, $microb],
                 [$microb, $hub, $usdx, $microb],
                 [$microb, $quota, $usdx, $microb],
-                [$microb, $hubabuba, $hub, $usdx, $microb],
-                [$microb, $hub, $hubabuba, $bip, $microb],
-                [$microb, $bip, $hubabuba, $hub, $microb],
+                [$microb, $usdx, $quota, $microb],
+                [$microb, $btc, $bip, $microb],
+                [$microb, $bip, $btc, $microb],
+                [$microb, $btc, $usdx, $microb],
+                [$microb, $usdx, $btc, $microb],
             ],
             'BEE' => [
                 [$bip, $bee, $musd, $bip],
@@ -345,6 +370,8 @@ class PoolsStore
                 [$bip, $bee, $musd, $usdce, $bip],
                 [$bip, $bee, $musd, $usdte, $bip],
                 [$bip, $bee, $musd, $hub, $bip],
+                [$bip, $bee, $hub, $bip],
+                [$bip, $hub, $bee, $bip],
             ],
             'MUSD' => [
                 [$bip, $musd, $usdte, $hub, $bip],
