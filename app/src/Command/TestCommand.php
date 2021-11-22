@@ -243,6 +243,15 @@ class TestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
+        $api = new MinterAPI('https://api.minter.one/v2/');
+        $resp = $api->estimateCoinSell('COUPON', 1, 'BIGMAC');
+        dump($resp);
+        $resp = $api->estimateCoinBuy('BIGMAC', 1, 'COUPON');
+        dump($resp);
+
+        return 0;
+
+
         $r = file_get_contents('https://explorer-api.minter.network/api/v2/coins');
         $data = json_decode($r, true);
 
@@ -499,6 +508,8 @@ class TestCommand extends Command
         $api = new MinterAPI($nodeUrl);
 //        $wallet = MinterWallet::create();
 //        var_dump($wallet);
+
+        $api->estimateCoinSell('BIGMAC', 1, 'COUPON');
 
         $items = [
             "achieve",
