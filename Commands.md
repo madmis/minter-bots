@@ -116,12 +116,12 @@ OR
 #    --custom-coin-pool --one-bip-in-custom-coin-price=0.005 |& tee -a ./var/log/custom-usdte.txt &
    
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 491 --req-delay=0 -i 10000000 -p CUSTOM-MICROB \
+    -a 521 --req-delay=0 -i 10000000 -p CUSTOM-MICROB \
     --wallets-file=/var/www/ccbip/resources/wallets/9174b0.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.3 |& tee -a ./var/log/custom-microb.txt &
     
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 3.26 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
+    -a 3.82 --req-delay=0 -i 10000000 -p CUSTOM-BIGMAC \
     --wallets-file=/var/www/ccbip/resources/wallets/eee5c7.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.002 |& tee -a ./var/log/custom-bigmac.txt &
 
@@ -170,7 +170,7 @@ OR
 #    --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdce-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 98.55 --req-delay=0 -i 10000000000 -p CUSTOM-USDTE-2 \
+    -a 105 --req-delay=0 -i 10000000000 -p CUSTOM-USDTE-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a5f12d.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdte-2.txt &
 
@@ -180,7 +180,7 @@ OR
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-usdx-2.txt &
 
 ./bin/console app:named-pools:arbitrate --read-node='https://api.minter.one/v2/' --write-node='https://api.minter.one/v2/' \
-    -a 82.13 --req-delay=0 -i 1000000000 -p CUSTOM-MUSD-2 \
+    -a 90.71 --req-delay=0 -i 1000000000 -p CUSTOM-MUSD-2 \
     --wallets-file=/var/www/ccbip/resources/wallets/a23b3e.json \
     --custom-coin-pool --one-bip-in-custom-coin-price=0.006 |& tee -a ./var/log/custom-musd-2.txt &
 ```
