@@ -1,6 +1,0 @@
-address:
-Mxce9d79606fa5132b805b673a72515d5e3e3c0965
-mnemonic:
-differ bacon beach arctic bid garlic life fee derive delay museum swift
-private_key
-b894bb31c2e67f61794b4f979b3900851ed9a4d81e668b4a5fcd0c858625952a

@@ -1,7 +1,0 @@
-address:
-Mx77783f2533aaa973866d957040686b08a2f94060
-mnemonic:
-trigger taxi fork tiny civil humor business gown gasp basic tornado champion
-private_key
-b223f2ffe62c00ae2941d5c39220be3d3e71ee04c01c6ff000dfc4e48e4a335d
-
